@@ -49,25 +49,19 @@
 
 
 
-<meta name="description" content="内核版本: linux-2.6.30.4目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
-要支持RTL8188EUS WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用wpa_supplicant和wpa_cli完成wifi连接的工作。
-
-编译RTL8188驱动移植wpa_sup">
+<meta name="description" content="内核版本: linux-2.6.30.4WIFI硬件型号： RTL8188eu目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
+要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用_wpa_supplicant和wpa_cli_完成wifi连接的工作。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="s3c2440-支持RTL8188EUS无线网卡(五)">
-<meta property="og:url" content="http://zwxcp.cn/s3c2440-支持RTL8188EUS无线网卡(五)/index.html">
+<meta property="og:title" content="s3c2440-支持RTL8188EU无线网卡(五)">
+<meta property="og:url" content="http://zwxcp.cn/s3c2440-支持RTL8188EU无线网卡(五)/index.html">
 <meta property="og:site_name" content="SAR'S BLOG">
-<meta property="og:description" content="内核版本: linux-2.6.30.4目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
-要支持RTL8188EUS WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用wpa_supplicant和wpa_cli完成wifi连接的工作。
-
-编译RTL8188驱动移植wpa_sup">
-<meta property="og:updated_time" content="2015-12-11T03:41:13.491Z">
+<meta property="og:description" content="内核版本: linux-2.6.30.4WIFI硬件型号： RTL8188eu目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
+要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用_wpa_supplicant和wpa_cli_完成wifi连接的工作。">
+<meta property="og:updated_time" content="2015-12-11T03:44:16.536Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="s3c2440-支持RTL8188EUS无线网卡(五)">
-<meta name="twitter:description" content="内核版本: linux-2.6.30.4目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
-要支持RTL8188EUS WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用wpa_supplicant和wpa_cli完成wifi连接的工作。
-
-编译RTL8188驱动移植wpa_sup">
+<meta name="twitter:title" content="s3c2440-支持RTL8188EU无线网卡(五)">
+<meta name="twitter:description" content="内核版本: linux-2.6.30.4WIFI硬件型号： RTL8188eu目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
+要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用_wpa_supplicant和wpa_cli_完成wifi连接的工作。">
 
 
 
@@ -79,7 +73,7 @@
   };
 </script>
 
-  <title> s3c2440-支持RTL8188EUS无线网卡(五) | SAR'S BLOG </title>
+  <title> s3c2440-支持RTL8188EU无线网卡(五) | SAR'S BLOG </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -230,7 +224,7 @@
             
             
               
-                s3c2440-支持RTL8188EUS无线网卡(五)
+                s3c2440-支持RTL8188EU无线网卡(五)
               
             
           </h1>
@@ -265,8 +259,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/s3c2440-支持RTL8188EUS无线网卡(五)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="s3c2440-支持RTL8188EUS无线网卡(五)/" itemprop="commentsCount"></span>
+                <a href="/s3c2440-支持RTL8188EU无线网卡(五)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="s3c2440-支持RTL8188EU无线网卡(五)/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -286,8 +280,8 @@
 
       
         <span itemprop="articleBody"><hr>
-<p>内核版本: linux-2.6.30.4<br>目标：支持RTL8188EUS无线网卡，为硬件提供网络功能</p>
-<p>要支持RTL8188EUS WIFI无线网卡，我们必须首先获取RTL8188驱动，到<em><a href="https://github.com/lwfinger/rtl8188eu" target="_blank" rel="external">gitbub下RTL8188载驱动</a></em>，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用<a href="http://w1.fi/" target="_blank" rel="external">wpa_supplicant和wpa_cli</a>完成wifi连接的工作。</p>
+<p>内核版本: linux-2.6.30.4<br>WIFI硬件型号： RTL8188eu<br>目标：支持RTL8188EUS无线网卡，为硬件提供网络功能</p>
+<p>要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到<em><a href="https://github.com/lwfinger/rtl8188eu" target="_blank" rel="external">gitbub下RTL8188载驱动</a></em>，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用_<a href="http://w1.fi/" target="_blank" rel="external">wpa_supplicant和wpa_cli</a>_完成wifi连接的工作。</p>
 <hr>
 <h3 id="u7F16_u8BD1RTL8188_u9A71_u52A8"><a href="#u7F16_u8BD1RTL8188_u9A71_u52A8" class="headerlink" title="编译RTL8188驱动"></a>编译RTL8188驱动</h3><h3 id="u79FB_u690Dwpa_supplicant"><a href="#u79FB_u690Dwpa_supplicant" class="headerlink" title="移植wpa_supplicant"></a>移植wpa_supplicant</h3><h3 id="u5206_u6790wpa_cli_u4EE3_u7801"><a href="#u5206_u6790wpa_cli_u4EE3_u7801" class="headerlink" title="分析wpa_cli代码"></a>分析wpa_cli代码</h3><h3 id="u4FEE_u6539wpa_cli_u4EE3_u7801_uFF0C_u5E76_u4F7F_u7528wpa_cli_u64CD_u4F5Cwifi"><a href="#u4FEE_u6539wpa_cli_u4EE3_u7801_uFF0C_u5E76_u4F7F_u7528wpa_cli_u64CD_u4F5Cwifi" class="headerlink" title="修改wpa_cli代码，并使用wpa_cli操作wifi"></a>修改wpa_cli代码，并使用wpa_cli操作wifi</h3><h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><hr>
 </span>
@@ -334,8 +328,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="s3c2440-支持RTL8188EUS无线网卡(五)/"
-           data-title="s3c2440-支持RTL8188EUS无线网卡(五)" data-url="http://zwxcp.cn/s3c2440-支持RTL8188EUS无线网卡(五)/">
+      <div class="ds-thread" data-thread-key="s3c2440-支持RTL8188EU无线网卡(五)/"
+           data-title="s3c2440-支持RTL8188EU无线网卡(五)" data-url="http://zwxcp.cn/s3c2440-支持RTL8188EU无线网卡(五)/">
       </div>
     
   </div>
