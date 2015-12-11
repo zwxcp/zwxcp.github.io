@@ -49,19 +49,20 @@
 
 
 
-<meta name="description" content="内核版本: linux-2.6.30.4WIFI硬件型号： RTL8188eu目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
-要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用_wpa_supplicant和wpa_cli_完成wifi连接的工作。">
+<meta name="description" content="内核版本: linux-2.6.30.4CPU型号： s3c2440WIFI硬件型号： RTL8188euwpa_supplicant：wpa_supplicant-2.5openssl: openssl-0.9.8za目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
+要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下">
 <meta property="og:type" content="article">
 <meta property="og:title" content="s3c2440-支持RTL8188EU无线网卡(五)">
 <meta property="og:url" content="http://zwxcp.cn/s3c2440-支持RTL8188EU无线网卡(五)/index.html">
 <meta property="og:site_name" content="SAR'S BLOG">
-<meta property="og:description" content="内核版本: linux-2.6.30.4WIFI硬件型号： RTL8188eu目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
-要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用_wpa_supplicant和wpa_cli_完成wifi连接的工作。">
-<meta property="og:updated_time" content="2015-12-11T03:44:16.536Z">
+<meta property="og:description" content="内核版本: linux-2.6.30.4CPU型号： s3c2440WIFI硬件型号： RTL8188euwpa_supplicant：wpa_supplicant-2.5openssl: openssl-0.9.8za目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
+要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下">
+<meta property="og:image" content="http://i.imgur.com/TKtRYrc.png">
+<meta property="og:updated_time" content="2015-12-11T08:55:46.345Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="s3c2440-支持RTL8188EU无线网卡(五)">
-<meta name="twitter:description" content="内核版本: linux-2.6.30.4WIFI硬件型号： RTL8188eu目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
-要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用_wpa_supplicant和wpa_cli_完成wifi连接的工作。">
+<meta name="twitter:description" content="内核版本: linux-2.6.30.4CPU型号： s3c2440WIFI硬件型号： RTL8188euwpa_supplicant：wpa_supplicant-2.5openssl: openssl-0.9.8za目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
+要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下">
 
 
 
@@ -280,10 +281,83 @@
 
       
         <span itemprop="articleBody"><hr>
-<p>内核版本: linux-2.6.30.4<br>WIFI硬件型号： RTL8188eu<br>目标：支持RTL8188EUS无线网卡，为硬件提供网络功能</p>
-<p>要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到<em><a href="https://github.com/lwfinger/rtl8188eu" target="_blank" rel="external">gitbub下RTL8188载驱动</a></em>，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用_<a href="http://w1.fi/" target="_blank" rel="external">wpa_supplicant和wpa_cli</a>_完成wifi连接的工作。</p>
+<p>内核版本: linux-2.6.30.4<br>CPU型号： s3c2440<br>WIFI硬件型号： RTL8188eu<br>wpa_supplicant：wpa_supplicant-2.5<br>openssl: openssl-0.9.8za<br>目标：支持RTL8188EUS无线网卡，为硬件提供网络功能</p>
+<p>要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到<a href="https://github.com/lwfinger/rtl8188eu" target="_blank" rel="external">gitbub下RTL8188载驱动</a>，下载后的驱动不用修改，直接编译出驱动ko模块即可；准备好驱动后，使用<a href="http://w1.fi/" target="_blank" rel="external">wpa_supplicant和wpa_cli</a>完成wifi连接的工作。</p>
 <hr>
-<h3 id="u7F16_u8BD1RTL8188_u9A71_u52A8"><a href="#u7F16_u8BD1RTL8188_u9A71_u52A8" class="headerlink" title="编译RTL8188驱动"></a>编译RTL8188驱动</h3><h3 id="u79FB_u690Dwpa_supplicant"><a href="#u79FB_u690Dwpa_supplicant" class="headerlink" title="移植wpa_supplicant"></a>移植wpa_supplicant</h3><h3 id="u5206_u6790wpa_cli_u4EE3_u7801"><a href="#u5206_u6790wpa_cli_u4EE3_u7801" class="headerlink" title="分析wpa_cli代码"></a>分析wpa_cli代码</h3><h3 id="u4FEE_u6539wpa_cli_u4EE3_u7801_uFF0C_u5E76_u4F7F_u7528wpa_cli_u64CD_u4F5Cwifi"><a href="#u4FEE_u6539wpa_cli_u4EE3_u7801_uFF0C_u5E76_u4F7F_u7528wpa_cli_u64CD_u4F5Cwifi" class="headerlink" title="修改wpa_cli代码，并使用wpa_cli操作wifi"></a>修改wpa_cli代码，并使用wpa_cli操作wifi</h3><h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><hr>
+<h3 id="u7F16_u8BD1RTL8188_u9A71_u52A8"><a href="#u7F16_u8BD1RTL8188_u9A71_u52A8" class="headerlink" title="编译RTL8188驱动"></a>编译RTL8188驱动</h3><ul>
+<li><p>下载rtl8188驱动</p>
+<p>   git clone <a href="https://github.com/lwfinger/rtl8188eu" target="_blank" rel="external">https://github.com/lwfinger/rtl8188eu</a></p>
+</li>
+<li><p>修改RTL8188修改<strong>Makefile</strong></p>
+<p><strong>注意：编译前需要先将内核编译一次，模块的编译需要依赖内核编译生成的文件</strong></p>
+<p>   #添加对应硬件平台配置项目<br>   CONFIG_PLATFORM_ARM_S3C2440 = y</p>
+<p>   #关闭省电模式<br>   CONFIG_POWER_SAVING = n</p>
+<p>   #添加对应平台编译工具，内核版本，内核源码路径，生成模块名称等<br>   ifeq ($(CONFIG_PLATFORM_ARM_S3C2440), y)<br>   EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_MINIMAL_MEMORY_USAGE<br>   ARCH = arm<br>   CROSS_COMPILE = arm-linux-<br>   KVER  := 2.6.30.4<br>   KSRC := /home/book/work/kernel/linux-2.6.30.4<br>   MODULE_NAME := 8188eu<br>   endif</p>
+</li>
+<li><p>编译RTL8188驱动，执行make命令</p>
+<p>   make</p>
+<p>make编译完成后，在rtl8188目录下生成8188eu.ko即为对应驱动模块文件。</p>
+</li>
+<li><p>驱动模块使用</p>
+<p>将编译后的8188eu.ko和rtl8188eufw.bin拷入设备，将rtl8188eufw.bin拷贝到/lib/firmware/rtlwifi/</p>
+<h1 id="u5728_u8BBE_u5907lib_u76EE_u5F55_u4E0B_u65B0_u5EFArtlwifi_u76EE_u5F55"><a href="#u5728_u8BBE_u5907lib_u76EE_u5F55_u4E0B_u65B0_u5EFArtlwifi_u76EE_u5F55" class="headerlink" title="在设备lib目录下新建rtlwifi目录"></a>在设备lib目录下新建rtlwifi目录</h1><p>   mkdir -p /lib/firmware/rtlwifi/<br>   cp rtl8188eufw.bin /lib/firmware/rtlwifi/</p>
+<h1 id="u5728_u8BBE_u5907lib_u76EE_u5F55_u4E0B_u5EFA_u7ACB_u4E0E_u5185_u6838_u7248_u672C_u76F8_u540C_u76EE_u5F55_uFF0C_u9632_u6B62_u6A21_u5757_u5B89_u88C5_u6216_u5378_u8F7D_u8FC7_u7A0B_u4E2D_u62A5_u9519"><a href="#u5728_u8BBE_u5907lib_u76EE_u5F55_u4E0B_u5EFA_u7ACB_u4E0E_u5185_u6838_u7248_u672C_u76F8_u540C_u76EE_u5F55_uFF0C_u9632_u6B62_u6A21_u5757_u5B89_u88C5_u6216_u5378_u8F7D_u8FC7_u7A0B_u4E2D_u62A5_u9519" class="headerlink" title="在设备lib目录下建立与内核版本相同目录，防止模块安装或卸载过程中报错"></a>在设备lib目录下建立与内核版本相同目录，防止模块安装或卸载过程中报错</h1><p>   mkdir -p /lib/modules/2.6.30.4</p>
+<h1 id="u5B89_u88C5_u6A21_u5757"><a href="#u5B89_u88C5_u6A21_u5757" class="headerlink" title="安装模块"></a>安装模块</h1><p>   insmod 8188eu.ko</p>
+<p>安装完驱动后，使用ifconfig -a命令查看wifi网络设备是否存在，如果存在，再用ifconfig wlan0 up开启wifi网络设备。</p>
+</li>
+</ul>
+<h3 id="u7F16_u8BD1_u79FB_u690Dwpa_supplicant"><a href="#u7F16_u8BD1_u79FB_u690Dwpa_supplicant" class="headerlink" title="编译移植wpa_supplicant"></a>编译移植wpa_supplicant</h3><ul>
+<li><p>下载wpa_supplicant和openssl-0.9.8za源码</p>
+<p>   #下载wpa_supplicant<br>   <a href="http://w1.fi/wpa_supplicant/" target="_blank" rel="external">http://w1.fi/wpa_supplicant/</a><br>   #下载openssl<br>   <a href="http://www.openssl.org/source/old/0.9.x/openssl-0.9.8za.tar.gz" target="_blank" rel="external">http://www.openssl.org/source/old/0.9.x/openssl-0.9.8za.tar.gz</a></p>
+</li>
+<li><p>为openssl打上补丁，分别解压openssl和wpa_supplicant</p>
+<h1 id="u89E3_u538Bwpa_supplicant"><a href="#u89E3_u538Bwpa_supplicant" class="headerlink" title="解压wpa_supplicant"></a>解压wpa_supplicant</h1><p>   tar zxvf wpa_supplicant-2.5.tar.gz</p>
+<h1 id="u89E3_u538Bopenssl"><a href="#u89E3_u538Bopenssl" class="headerlink" title="解压openssl"></a>解压openssl</h1><p>   tar zxvf openssl-0.9.8za.tar.gz</p>
+<h1 id="u62F7_u8D1Dwpa_supplicant-2-5/patches_u76EE_u5F55_u4E0Bopenssl-0-9-8za-tls-extensions-patch_u8865_u4E01_u6587_u4EF6_u5230openssl_u76EE_u5F55"><a href="#u62F7_u8D1Dwpa_supplicant-2-5/patches_u76EE_u5F55_u4E0Bopenssl-0-9-8za-tls-extensions-patch_u8865_u4E01_u6587_u4EF6_u5230openssl_u76EE_u5F55" class="headerlink" title="拷贝wpa_supplicant-2.5/patches目录下openssl-0.9.8za-tls-extensions.patch补丁文件到openssl目录"></a>拷贝wpa_supplicant-2.5/patches目录下openssl-0.9.8za-tls-extensions.patch补丁文件到openssl目录</h1><p>   cp wpa_supplicant-2.5/patches/openssl-0.9.8za-tls-extensions.patch ../openssl-0.9.8za</p>
+<h1 id="u7528patch_u547D_u4EE4_u6253_u4E0A_u8865_u4E01"><a href="#u7528patch_u547D_u4EE4_u6253_u4E0A_u8865_u4E01" class="headerlink" title="用patch命令打上补丁"></a>用patch命令打上补丁</h1><p>   patch -p1 &lt; openssl-0.9.8za-tls-extensions.patch</p>
+</li>
+<li><p>编译openssl<br>建立openssl的安装目录，建议安装在openssl-0.9.8za目录下，因为生成的库等只在交叉编译wpa_supplicant时使用</p>
+<h1 id="u5728openssl-0-9-8za_u76EE_u5F55_u4E0B_u5EFA_u7ACBbin_u76EE_u5F55_uFF0C_u5B58_u5728openssl_u7F16_u8BD1_u540E_u5E93_u6587_u4EF6"><a href="#u5728openssl-0-9-8za_u76EE_u5F55_u4E0B_u5EFA_u7ACBbin_u76EE_u5F55_uFF0C_u5B58_u5728openssl_u7F16_u8BD1_u540E_u5E93_u6587_u4EF6" class="headerlink" title="在openssl-0.9.8za目录下建立bin目录，存在openssl编译后库文件"></a>在openssl-0.9.8za目录下建立bin目录，存在openssl编译后库文件</h1><p>   mkdir openssl-0.9.8za/bin</p>
+<h1 id="u4FEE_u6539openssl-0-9-8za_u76EE_u5F55_u4E0BMakefile"><a href="#u4FEE_u6539openssl-0-9-8za_u76EE_u5F55_u4E0BMakefile" class="headerlink" title="修改openssl-0.9.8za目录下Makefile"></a>修改openssl-0.9.8za目录下Makefile</h1><p>   CC=arm-linux-gcc<br>   AR=arm-linux-ar$(ARFLAGS) r<br>   RANLIB=arm-linux-ranlib<br>   INSTALLTOP=刚才你建立的安装目录，要使用绝对路径，不然在make install的时候会出错<br>   OPENSSLDIR=刚才你建立的安装目录，要使用绝对路径，不然在make install的时候会出错<br>   make &amp;&amp; make install。</p>
+</li>
+<li><p>编译wpa_supplicant</p>
+<h1 id="u8FDB_u5165wpa_supplicant-2-5/wpa_supplicant_u76EE_u5F55"><a href="#u8FDB_u5165wpa_supplicant-2-5/wpa_supplicant_u76EE_u5F55" class="headerlink" title="进入wpa_supplicant-2.5/wpa_supplicant目录"></a>进入wpa_supplicant-2.5/wpa_supplicant目录</h1><p>   cd wpa_supplicant-2.5/wpa_supplicant<br>   cp defconfig .config</p>
+<h1 id="u4FEE_u6539-config_uFF0C_u589E_u52A0_u4EE5_u4E0B_u5185_u5BB9_uFF1A"><a href="#u4FEE_u6539-config_uFF0C_u589E_u52A0_u4EE5_u4E0B_u5185_u5BB9_uFF1A" class="headerlink" title="修改.config，增加以下内容："></a>修改.config，增加以下内容：</h1><p>   CC=arm-linux-gcc -Lopenssl安装目录/lib<br>   CFLAGS+=-Iopenssl安装目录/include<br>   LIBS+=-Lopenssl安装目录/lib<br>   dm6446增加内容如下：<br>   CC = arm_v5t_le-gcc -L/code/src/tool/wpa_supplicant2.5/openssl-0.9.8za/bin/lib<br>   CFLAGS += -I/code/src/tool/wpa_supplicant2.5/openssl-0.9.8za/bin/include<br>   LIBS += -L/code/src/tool/wpa_supplicant2.5/openssl-0.9.8za/bin/lib</p>
+<h1 id="make_u7F16_u8BD1"><a href="#make_u7F16_u8BD1" class="headerlink" title="make编译"></a>make编译</h1><p>   make</p>
+</li>
+<li><p>编译wpa_supplicant错误解决</p>
+<h1 id="u4FEE_u6539wpa_supplicant_u7684Makefile_u5C06_uFF1A"><a href="#u4FEE_u6539wpa_supplicant_u7684Makefile_u5C06_uFF1A" class="headerlink" title="修改wpa_supplicant的Makefile将："></a>修改wpa_supplicant的Makefile将：</h1><p>   CFLAGS += -I$(abspath ../src)<br>   CFLAGS += -I$(abspath ../src/utils)</p>
+<h1 id="u4FEE_u6539_u4E3A_uFF1A"><a href="#u4FEE_u6539_u4E3A_uFF1A" class="headerlink" title="修改为："></a>修改为：</h1><p>   CFLAGS += -I../src<br>   CFLAGS += -I../src/utils</p>
+</li>
+<li><p>wpa_supplicant编译配置文件.config配置</p>
+<p>使用默认的.config配置编译出的wpa_supplicant可执行文件较大，通过配置.config文件中选项，可以减小wpa_supplicant可执行文件大小<br>编辑.config</p>
+<p>   注释掉CONFIG_DRIVER_HOSTAP=y<br>   注释掉CONFIG_DRIVER_ATMEL=y<br>   注释掉CONFIG_DRIVER_NL80211=y<br>   反注释CONFIG_NO_STDOUT_DEBUG=y<br>   反注释CONFIG_NO_CONFIG_WRITE=y  </p>
+</li>
+<li><p>wpa_supplicant使用</p>
+<p>将编译后的wpa_supplicant可执行程序拷入设备，在设备etc目录下新建wpa_supplicant.conf文件</p>
+<p>   touch /etc/wpa_supplicant.conf</p>
+<p>将如下内容加入wpa_supplicant.conf文件：</p>
+<p>   ctrl_interface=/var/run/wpa_supplicant        # 请不要修改下面这一行内容，否则将不能正常工作<br>   ctrl_interface_group=0                        # 确保只有root用户能读取WPA的配置<br>   ap_scan=1                                     # 使用wpa_supplicant来扫描和选择AP</p>
+<p>新建/var/run/wpa_supplicant目录</p>
+<p>   mkdir -p /var/run/wpa_supplicant</p>
+<p>运行wpa_supplicant</p>
+<h1 id="u8C03_u8BD5_u6A21_u5F0F_u8FD0_u884Cwpa_supplicant_uFF0C_u4F7F_u7528_u8C03_u8BD5_u6A21_u5F0F_u662F_u5FC5_u987B_u5173_u6389-config_u4E2DCONFIG_NO_STDOUT_DEBUG_u9009_u9879"><a href="#u8C03_u8BD5_u6A21_u5F0F_u8FD0_u884Cwpa_supplicant_uFF0C_u4F7F_u7528_u8C03_u8BD5_u6A21_u5F0F_u662F_u5FC5_u987B_u5173_u6389-config_u4E2DCONFIG_NO_STDOUT_DEBUG_u9009_u9879" class="headerlink" title="调试模式运行wpa_supplicant，使用调试模式是必须关掉.config中CONFIG_NO_STDOUT_DEBUG选项"></a>调试模式运行wpa_supplicant，使用调试模式是必须关掉.config中CONFIG_NO_STDOUT_DEBUG选项</h1><p>   sudo wpa_supplicant -d -Dwext -iwlan0 -c/etc/wpa_supplicant.conf</p>
+<h1 id="u6216_u8005_u540E_u53F0_u8FD0_u884Cwpa_supplicant"><a href="#u6216_u8005_u540E_u53F0_u8FD0_u884Cwpa_supplicant" class="headerlink" title="或者后台运行wpa_supplicant"></a>或者后台运行wpa_supplicant</h1><p>   wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf -B</p>
+<p>至此wpa_supplicant移植完成。</p>
+</li>
+</ul>
+<h3 id="u8FD0_u884Cwpa_cli_u6D4B_u8BD5_u9A71_u52A8_u548Cwpa_supplicant"><a href="#u8FD0_u884Cwpa_cli_u6D4B_u8BD5_u9A71_u52A8_u548Cwpa_supplicant" class="headerlink" title="运行wpa_cli测试驱动和wpa_supplicant"></a>运行wpa_cli测试驱动和wpa_supplicant</h3><ul>
+<li><p>将wpa_cli执行程序拷入设备，运行wpa_cli进入交互模式</p>
+<p>   ./wpa_cli</p>
+</li>
+<li><p>在wpa_cli命令行中输入命令：</p>
+<h1 id="u626B_u63CFwifi"><a href="#u626B_u63CFwifi" class="headerlink" title="扫描wifi"></a>扫描wifi</h1><p>   scan</p>
+<h1 id="u83B7_u53D6scan_u547D_u4EE4_u626B_u63CF_u7ED3_u679C"><a href="#u83B7_u53D6scan_u547D_u4EE4_u626B_u63CF_u7ED3_u679C" class="headerlink" title="获取scan命令扫描结果"></a>获取scan命令扫描结果</h1><p>   scan_r</p>
+<p>结果显示如下：<br>   <img src="http://i.imgur.com/TKtRYrc.png" alt=""></p>
+</li>
+</ul>
+<h3 id="u4FEE_u6539wpa_cli_u4EE3_u7801_uFF0C_u5E76_u4F7F_u7528wpa_cli_u64CD_u4F5Cwifi"><a href="#u4FEE_u6539wpa_cli_u4EE3_u7801_uFF0C_u5E76_u4F7F_u7528wpa_cli_u64CD_u4F5Cwifi" class="headerlink" title="修改wpa_cli代码，并使用wpa_cli操作wifi"></a>修改wpa_cli代码，并使用wpa_cli操作wifi</h3><p>直接使用wap_cli可以完成wifi的连接过程，但在我们的实际项目中使用wpa_cli可执行程序不能灵活操作wifi，所以要想办法将wpa_cli的源码修改后放到我们自己的项目中。</p>
+<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><hr>
 </span>
       
     </div>
@@ -437,7 +511,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u7F16_u8BD1RTL8188_u9A71_u52A8"><span class="nav-number">1.</span> <span class="nav-text">编译RTL8188驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u79FB_u690Dwpa_supplicant"><span class="nav-number">2.</span> <span class="nav-text">移植wpa_supplicant</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5206_u6790wpa_cli_u4EE3_u7801"><span class="nav-number">3.</span> <span class="nav-text">分析wpa_cli代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4FEE_u6539wpa_cli_u4EE3_u7801_uFF0C_u5E76_u4F7F_u7528wpa_cli_u64CD_u4F5Cwifi"><span class="nav-number">4.</span> <span class="nav-text">修改wpa_cli代码，并使用wpa_cli操作wifi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u603B_u7ED3"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u7F16_u8BD1RTL8188_u9A71_u52A8"><span class="nav-number">1.</span> <span class="nav-text">编译RTL8188驱动</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u5728_u8BBE_u5907lib_u76EE_u5F55_u4E0B_u65B0_u5EFArtlwifi_u76EE_u5F55"><span class="nav-number"></span> <span class="nav-text">在设备lib目录下新建rtlwifi目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u5728_u8BBE_u5907lib_u76EE_u5F55_u4E0B_u5EFA_u7ACB_u4E0E_u5185_u6838_u7248_u672C_u76F8_u540C_u76EE_u5F55_uFF0C_u9632_u6B62_u6A21_u5757_u5B89_u88C5_u6216_u5378_u8F7D_u8FC7_u7A0B_u4E2D_u62A5_u9519"><span class="nav-number"></span> <span class="nav-text">在设备lib目录下建立与内核版本相同目录，防止模块安装或卸载过程中报错</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u5B89_u88C5_u6A21_u5757"><span class="nav-number"></span> <span class="nav-text">安装模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u7F16_u8BD1_u79FB_u690Dwpa_supplicant"><span class="nav-number">1.</span> <span class="nav-text">编译移植wpa_supplicant</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u89E3_u538Bwpa_supplicant"><span class="nav-number"></span> <span class="nav-text">解压wpa_supplicant</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u89E3_u538Bopenssl"><span class="nav-number"></span> <span class="nav-text">解压openssl</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u62F7_u8D1Dwpa_supplicant-2-5/patches_u76EE_u5F55_u4E0Bopenssl-0-9-8za-tls-extensions-patch_u8865_u4E01_u6587_u4EF6_u5230openssl_u76EE_u5F55"><span class="nav-number"></span> <span class="nav-text">拷贝wpa_supplicant-2.5/patches目录下openssl-0.9.8za-tls-extensions.patch补丁文件到openssl目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u7528patch_u547D_u4EE4_u6253_u4E0A_u8865_u4E01"><span class="nav-number"></span> <span class="nav-text">用patch命令打上补丁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u5728openssl-0-9-8za_u76EE_u5F55_u4E0B_u5EFA_u7ACBbin_u76EE_u5F55_uFF0C_u5B58_u5728openssl_u7F16_u8BD1_u540E_u5E93_u6587_u4EF6"><span class="nav-number"></span> <span class="nav-text">在openssl-0.9.8za目录下建立bin目录，存在openssl编译后库文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u4FEE_u6539openssl-0-9-8za_u76EE_u5F55_u4E0BMakefile"><span class="nav-number"></span> <span class="nav-text">修改openssl-0.9.8za目录下Makefile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u8FDB_u5165wpa_supplicant-2-5/wpa_supplicant_u76EE_u5F55"><span class="nav-number"></span> <span class="nav-text">进入wpa_supplicant-2.5/wpa_supplicant目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u4FEE_u6539-config_uFF0C_u589E_u52A0_u4EE5_u4E0B_u5185_u5BB9_uFF1A"><span class="nav-number"></span> <span class="nav-text">修改.config，增加以下内容：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#make_u7F16_u8BD1"><span class="nav-number"></span> <span class="nav-text">make编译</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u4FEE_u6539wpa_supplicant_u7684Makefile_u5C06_uFF1A"><span class="nav-number"></span> <span class="nav-text">修改wpa_supplicant的Makefile将：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u4FEE_u6539_u4E3A_uFF1A"><span class="nav-number"></span> <span class="nav-text">修改为：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u8C03_u8BD5_u6A21_u5F0F_u8FD0_u884Cwpa_supplicant_uFF0C_u4F7F_u7528_u8C03_u8BD5_u6A21_u5F0F_u662F_u5FC5_u987B_u5173_u6389-config_u4E2DCONFIG_NO_STDOUT_DEBUG_u9009_u9879"><span class="nav-number"></span> <span class="nav-text">调试模式运行wpa_supplicant，使用调试模式是必须关掉.config中CONFIG_NO_STDOUT_DEBUG选项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u6216_u8005_u540E_u53F0_u8FD0_u884Cwpa_supplicant"><span class="nav-number"></span> <span class="nav-text">或者后台运行wpa_supplicant</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u8FD0_u884Cwpa_cli_u6D4B_u8BD5_u9A71_u52A8_u548Cwpa_supplicant"><span class="nav-number">1.</span> <span class="nav-text">运行wpa_cli测试驱动和wpa_supplicant</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u626B_u63CFwifi"><span class="nav-number"></span> <span class="nav-text">扫描wifi</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u83B7_u53D6scan_u547D_u4EE4_u626B_u63CF_u7ED3_u679C"><span class="nav-number"></span> <span class="nav-text">获取scan命令扫描结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u4FEE_u6539wpa_cli_u4EE3_u7801_uFF0C_u5E76_u4F7F_u7528wpa_cli_u64CD_u4F5Cwifi"><span class="nav-number">1.</span> <span class="nav-text">修改wpa_cli代码，并使用wpa_cli操作wifi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u603B_u7ED3"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
