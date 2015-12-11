@@ -58,7 +58,7 @@
 <meta property="og:description" content="内核版本: linux-2.6.30.4CPU型号： s3c2440WIFI硬件型号： RTL8188euwpa_supplicant：wpa_supplicant-2.5openssl: openssl-0.9.8za目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
 要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，下">
 <meta property="og:image" content="http://i.imgur.com/TKtRYrc.png">
-<meta property="og:updated_time" content="2015-12-11T09:13:16.643Z">
+<meta property="og:updated_time" content="2015-12-11T09:23:26.426Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="s3c2440-支持RTL8188EU无线网卡(五)">
 <meta name="twitter:description" content="内核版本: linux-2.6.30.4CPU型号： s3c2440WIFI硬件型号： RTL8188euwpa_supplicant：wpa_supplicant-2.5openssl: openssl-0.9.8za目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
@@ -288,7 +288,7 @@
 <li><p>下载rtl8188驱动</p>
 <p>   git clone <a href="https://github.com/lwfinger/rtl8188eu" target="_blank" rel="external">https://github.com/lwfinger/rtl8188eu</a></p>
 </li>
-<li><p>修改RTL8188修改<strong>Makefile</strong><br><strong>注意：编译前需要先将内核编译一次，模块的编译需要依赖内核编译生成的文件</strong></p>
+<li><p>修改RTL8188<strong>Makefile</strong><br><strong>注意：编译前需要先将内核编译一次，模块的编译需要依赖内核编译生成的文件</strong></p>
 <p>添加对应硬件平台配置项目</p>
 <p>   CONFIG_PLATFORM_ARM_S3C2440 = y</p>
 <p>关闭省电模式</p>
