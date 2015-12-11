@@ -55,9 +55,9 @@
 让内核支持yaffs2文件系统
 下载yaffs2源码并解压，进入源码目录：
 tar zxvf yaffs2.tar.gz
-cd yaffs2  
+cd yaffs2
 
-给内核">
+给内核打上">
 <meta property="og:type" content="article">
 <meta property="og:title" content="s3c2440-支持yaffs2文件系统(三)">
 <meta property="og:url" content="http://zwxcp.cn/s3c2440-支持yaffs2文件系统(三)/index.html">
@@ -68,10 +68,10 @@ cd yaffs2
 让内核支持yaffs2文件系统
 下载yaffs2源码并解压，进入源码目录：
 tar zxvf yaffs2.tar.gz
-cd yaffs2  
+cd yaffs2
 
-给内核">
-<meta property="og:updated_time" content="2015-12-11T03:06:58.944Z">
+给内核打上">
+<meta property="og:updated_time" content="2015-12-11T03:08:23.618Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="s3c2440-支持yaffs2文件系统(三)">
 <meta name="twitter:description" content="内核版本: linux-2.6.30.4busybox版本： busybox-1.23.2目标：内核支持yaffs2文件系统，使用busybox制作最小文件系统
@@ -80,9 +80,9 @@ cd yaffs2
 让内核支持yaffs2文件系统
 下载yaffs2源码并解压，进入源码目录：
 tar zxvf yaffs2.tar.gz
-cd yaffs2  
+cd yaffs2
 
-给内核">
+给内核打上">
 
 
 
@@ -306,28 +306,28 @@ cd yaffs2
 <h3 id="u8BA9_u5185_u6838_u652F_u6301yaffs2_u6587_u4EF6_u7CFB_u7EDF"><a href="#u8BA9_u5185_u6838_u652F_u6301yaffs2_u6587_u4EF6_u7CFB_u7EDF" class="headerlink" title="让内核支持yaffs2文件系统"></a>让内核支持yaffs2文件系统</h3><ul>
 <li><p>下载yaffs2源码并解压，进入源码目录：</p>
 <pre><code>tar zxvf yaffs2.tar.gz
-cd yaffs2  
+cd yaffs2
 </code></pre></li>
 <li><p>给内核打上yaffs2文件系统补丁，执行：</p>
 <pre><code>./patch-ker.sh c /../../linux-2.6.30.4 &lt;-------------内核解压后的源码目录
 </code></pre><p>打完补丁后，内核源码fs目录下会生产一个yaffs2目录，同时Makefile文件和Kconfig文件增加了yaffs2的配置和编译条件。</p>
 </li>
 <li><p>配置内核支持yaffs2<br>这里配置选项较多，可根据自己的需要进行配置，把不需要的文件系统去掉，如下为几个主要的配置：  </p>
-<pre><code>File systems ---&gt;  
-DOS/FAT/NT Filesystems ---&gt;  
-    &lt;*&gt; MSDOS fs support  
-    &lt;*&gt; VFAT (Windows95) fs support  
-Miscellaneous filesystems ---&gt;  
-    &lt;*&gt; YAFFS2 file system support  
+<pre><code>File systems ---&gt;
+DOS/FAT/NT Filesystems ---&gt;
+    &lt;*&gt; MSDOS fs support
+    &lt;*&gt; VFAT (Windows95) fs support
+Miscellaneous filesystems ---&gt;
+    &lt;*&gt; YAFFS2 file system support
     [*] Autoselect yaffs2 format
 </code></pre><p>配置语言选项：  </p>
-<pre><code>Native Language support ---&gt;  
-(iso8859-1) Default NLS Option  
-    &lt;*&gt; Codepage 437(United States, Canada)  
-    &lt;*&gt; Simplified Chinese charset(CP936, GB2312)  
-    &lt;*&gt; NLS ISO8859-1 (Latin 1; Western European Language)  
-    &lt;*&gt; NLS UTF-8  
-</code></pre><p>经过上面的配置后，使用make zImage重新编译内核，编译出的内核就已经支持yaffs2文件系统了。  </p>
+<pre><code>Native Language support ---&gt;
+(iso8859-1) Default NLS Option
+    &lt;*&gt; Codepage 437(United States, Canada)
+    &lt;*&gt; Simplified Chinese charset(CP936, GB2312)
+    &lt;*&gt; NLS ISO8859-1 (Latin 1; Western European Language)
+    &lt;*&gt; NLS UTF-8
+</code></pre><p>经过上面的配置后，使用make zImage重新编译内核，编译出的内核就已经支持yaffs2文件系统了.</p>
 </li>
 </ul>
 <h3 id="u5236_u4F5C_u6700_u5C0F_u6587_u4EF6_u7CFB_u7EDF"><a href="#u5236_u4F5C_u6700_u5C0F_u6587_u4EF6_u7CFB_u7EDF" class="headerlink" title="制作最小文件系统"></a>制作最小文件系统</h3><p>移植内核，制作文件系统，我们的最终目的是在对应硬件平台上运行我们的应用程序，下面我们制作一个满足我们要求的最小基本文件系统。  </p>
