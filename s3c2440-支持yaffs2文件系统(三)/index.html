@@ -71,7 +71,7 @@ tar zxvf yaffs2.tar.gz
 cd yaffs2  
 
 给内核">
-<meta property="og:updated_time" content="2015-12-11T03:05:19.969Z">
+<meta property="og:updated_time" content="2015-12-11T03:06:58.944Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="s3c2440-支持yaffs2文件系统(三)">
 <meta name="twitter:description" content="内核版本: linux-2.6.30.4busybox版本： busybox-1.23.2目标：内核支持yaffs2文件系统，使用busybox制作最小文件系统
@@ -419,43 +419,43 @@ cp ~/work/tool/opt/EmbedSky/4.3.3/arm-none-linux-gnueabi/libc/thumb2/usr/lib/lib
 <li><p>创建proc文件系统，在_install目录下新建proc目录即可:</p>
 <p>   mkdir _install/proc</p>
 </li>
-<li><p>创建rcS脚本，在_install/etc/下新建init.d目录，在init.d目录中新建rcS文件，  </p>
-<p>   mkdir -p _install/etc/init.d<br>   touch _install/etc/init.d/rcS  </p>
+<li><p>创建rcS脚本，在_install/etc/下新建init.d目录，在init.d目录中新建rcS文件，</p>
+<p>   mkdir -p _install/etc/init.d<br>   touch _install/etc/init.d/rcS</p>
 </li>
-<li><p>修改rcS文件，在该文件中新增如下内容：  </p>
+<li><p>修改rcS文件，在该文件中新增如下内容：</p>
 <p>   mount -a</p>
 </li>
-<li><p>修改inittab文件，增加如下内容：  </p>
-<p>   ::sysinit:/etc/init.d/rcS </p>
+<li><p>修改inittab文件，增加如下内容：</p>
+<p>   ::sysinit:/etc/init.d/rcS</p>
 </li>
 <li><p>创建/etc/fstab文件，并增加如下内容：  </p>
-<p>   proc            /proc           proc    defaults        0       0  </p>
+<p>   proc            /proc           proc    defaults        0       0</p>
 </li>
-<li><p>给/etc/init.d/rcS文件添加可执行权限  </p>
+<li><p>给/etc/init.d/rcS文件添加可执行权限</p>
 <p>   chmod +x /etc/init.d/rcS</p>
 </li>
-<li><p>udev自动创建/dev目录下设备节点  </p>
-<p>   mkdir /sys<br>   mkdir /tmp  </p>
+<li><p>udev自动创建/dev目录下设备节点</p>
+<p>   mkdir /sys<br>   mkdir /tmp</p>
 </li>
-<li><p>修改/etc/fstab增加如下内容：  </p>
-<p>   tmpfs           /tmp            tmpfs   defaults        0       0<br>   sysfs           /sys            sysfs   defaults        0       0<br>   tmpfs           /dev            tmpfs   defaults        0       0  </p>
+<li><p>修改/etc/fstab增加如下内容：</p>
+<p>   tmpfs           /tmp            tmpfs   defaults        0       0<br>   sysfs           /sys            sysfs   defaults        0       0<br>   tmpfs           /dev            tmpfs   defaults        0       0</p>
 </li>
 <li><p>修改/etc/init.d/rcS文件，新增如下内容：  </p>
-<pre><code>mkdir /dev/pts  
-mount -t devpts devpts /dev/pts  
-echo /sbin/mdev &gt; /proc/sys/kernel/hotplug  
-mdev -s  
+<pre><code>mkdir /dev/pts
+mount -t devpts devpts /dev/pts
+echo /sbin/mdev &gt; /proc/sys/kernel/hotplug
+mdev -s
 </code></pre></li>
 </ul>
 <h3 id="u6700_u7EC8_u76F8_u5173_u914D_u7F6E_u6587_u4EF6_u5185_u5BB9_u5982_u4E0B"><a href="#u6700_u7EC8_u76F8_u5173_u914D_u7F6E_u6587_u4EF6_u5185_u5BB9_u5982_u4E0B" class="headerlink" title="最终相关配置文件内容如下"></a>最终相关配置文件内容如下</h3><ul>
-<li><p>/etc/inittab  </p>
-<p>   console::askfirst:-/bin/sh<br>   ::sysinit:/etc/init.d/rcS  </p>
+<li><p>/etc/inittab</p>
+<p>   console::askfirst:-/bin/sh<br>   ::sysinit:/etc/init.d/rcS</p>
 </li>
-<li><p>/etc/fstab  </p>
-<h1 id="device_mount-point_type_options_dump_fsck_order"><a href="#device_mount-point_type_options_dump_fsck_order" class="headerlink" title="device        mount-point     type    options         dump    fsck order"></a>device        mount-point     type    options         dump    fsck order</h1><p>   proc            /proc           proc    defaults        0       0<br>   tmpfs           /tmp            tmpfs   defaults        0       0<br>   sysfs           /sys            sysfs   defaults        0       0<br>   tmpfs           /dev            tmpfs   defaults        0       0  </p>
+<li><p>/etc/fstab</p>
+<h1 id="device_mount-point_type_options_dump_fsck_order"><a href="#device_mount-point_type_options_dump_fsck_order" class="headerlink" title="device        mount-point     type    options         dump    fsck order"></a>device        mount-point     type    options         dump    fsck order</h1><p>   proc            /proc           proc    defaults        0       0<br>   tmpfs           /tmp            tmpfs   defaults        0       0<br>   sysfs           /sys            sysfs   defaults        0       0<br>   tmpfs           /dev            tmpfs   defaults        0       0</p>
 </li>
 <li><p>/etc/init.d/rcS  </p>
-<p>   mount -a<br>   mkdir /dev/pts<br>   mount -t devpts devpts /dev/pts<br>   echo /sbin/mdev &gt; /proc/sys/kernel/hotplug<br>   mdev -s  </p>
+<p>   mount -a<br>   mkdir /dev/pts<br>   mount -t devpts devpts /dev/pts<br>   echo /sbin/mdev &gt; /proc/sys/kernel/hotplug<br>   mdev -s</p>
 </li>
 </ul>
 <h3 id="u6700_u540E_u5236_u4F5C_u65B0_u7684_u6587_u4EF6_u7CFB_u7EDF"><a href="#u6700_u540E_u5236_u4F5C_u65B0_u7684_u6587_u4EF6_u7CFB_u7EDF" class="headerlink" title="最后制作新的文件系统"></a>最后制作新的文件系统</h3><ul>
