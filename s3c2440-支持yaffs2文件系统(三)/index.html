@@ -51,38 +51,38 @@
 
 <meta name="description" content="内核版本: linux-2.6.30.4busybox版本： busybox-1.23.2目标：内核支持yaffs2文件系统，使用busybox制作最小文件系统
 
-首先让内核支持yaffs2文件系统，然后使用busybox制作最小文件系统。  
+首先让内核支持yaffs2文件系统，然后使用busybox制作最小文件系统.
 让内核支持yaffs2文件系统
 下载yaffs2源码并解压，进入源码目录：
 tar zxvf yaffs2.tar.gz
 cd yaffs2
 
-给内核打上">
+给内核打上ya">
 <meta property="og:type" content="article">
 <meta property="og:title" content="s3c2440-支持yaffs2文件系统(三)">
 <meta property="og:url" content="http://zwxcp.cn/s3c2440-支持yaffs2文件系统(三)/index.html">
 <meta property="og:site_name" content="SAR'S BLOG">
 <meta property="og:description" content="内核版本: linux-2.6.30.4busybox版本： busybox-1.23.2目标：内核支持yaffs2文件系统，使用busybox制作最小文件系统
 
-首先让内核支持yaffs2文件系统，然后使用busybox制作最小文件系统。  
+首先让内核支持yaffs2文件系统，然后使用busybox制作最小文件系统.
 让内核支持yaffs2文件系统
 下载yaffs2源码并解压，进入源码目录：
 tar zxvf yaffs2.tar.gz
 cd yaffs2
 
-给内核打上">
-<meta property="og:updated_time" content="2015-12-11T03:12:07.618Z">
+给内核打上ya">
+<meta property="og:updated_time" content="2015-12-11T03:16:38.110Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="s3c2440-支持yaffs2文件系统(三)">
 <meta name="twitter:description" content="内核版本: linux-2.6.30.4busybox版本： busybox-1.23.2目标：内核支持yaffs2文件系统，使用busybox制作最小文件系统
 
-首先让内核支持yaffs2文件系统，然后使用busybox制作最小文件系统。  
+首先让内核支持yaffs2文件系统，然后使用busybox制作最小文件系统.
 让内核支持yaffs2文件系统
 下载yaffs2源码并解压，进入源码目录：
 tar zxvf yaffs2.tar.gz
 cd yaffs2
 
-给内核打上">
+给内核打上ya">
 
 
 
@@ -302,7 +302,7 @@ cd yaffs2
       
         <span itemprop="articleBody"><p>内核版本: linux-2.6.30.4<br>busybox版本： busybox-1.23.2<br>目标：内核支持yaffs2文件系统，使用busybox制作最小文件系统</p>
 <hr>
-<p>首先让内核支持yaffs2文件系统，然后使用busybox制作最小文件系统。  </p>
+<p>首先让内核支持yaffs2文件系统，然后使用busybox制作最小文件系统.</p>
 <h3 id="u8BA9_u5185_u6838_u652F_u6301yaffs2_u6587_u4EF6_u7CFB_u7EDF"><a href="#u8BA9_u5185_u6838_u652F_u6301yaffs2_u6587_u4EF6_u7CFB_u7EDF" class="headerlink" title="让内核支持yaffs2文件系统"></a>让内核支持yaffs2文件系统</h3><ul>
 <li><p>下载yaffs2源码并解压，进入源码目录：</p>
 <pre><code>tar zxvf yaffs2.tar.gz
@@ -312,7 +312,7 @@ cd yaffs2
 <pre><code>./patch-ker.sh c /../../linux-2.6.30.4 &lt;-------------内核解压后的源码目录
 </code></pre><p>打完补丁后，内核源码fs目录下会生产一个yaffs2目录，同时Makefile文件和Kconfig文件增加了yaffs2的配置和编译条件。</p>
 </li>
-<li><p>配置内核支持yaffs2<br>这里配置选项较多，可根据自己的需要进行配置，把不需要的文件系统去掉，如下为几个主要的配置：  </p>
+<li><p>配置内核支持yaffs2<br>这里配置选项较多，可根据自己的需要进行配置，把不需要的文件系统去掉，如下为几个主要的配置：</p>
 <pre><code>File systems ---&gt;
 DOS/FAT/NT Filesystems ---&gt;
     &lt;*&gt; MSDOS fs support
@@ -320,7 +320,7 @@ DOS/FAT/NT Filesystems ---&gt;
 Miscellaneous filesystems ---&gt;
     &lt;*&gt; YAFFS2 file system support
     [*] Autoselect yaffs2 format
-</code></pre><p>配置语言选项：  </p>
+</code></pre><p>配置语言选项：</p>
 <pre><code>Native Language support ---&gt;
 (iso8859-1) Default NLS Option
     &lt;*&gt; Codepage 437(United States, Canada)
@@ -330,15 +330,15 @@ Miscellaneous filesystems ---&gt;
 </code></pre><p>经过上面的配置后，使用make zImage重新编译内核，编译出的内核就已经支持yaffs2文件系统了.</p>
 </li>
 </ul>
-<h3 id="u5236_u4F5C_u6700_u5C0F_u6587_u4EF6_u7CFB_u7EDF"><a href="#u5236_u4F5C_u6700_u5C0F_u6587_u4EF6_u7CFB_u7EDF" class="headerlink" title="制作最小文件系统"></a>制作最小文件系统</h3><p>移植内核，制作文件系统，我们的最终目的是在对应硬件平台上运行我们的应用程序，下面我们制作一个满足我们要求的最小基本文件系统。  </p>
+<h3 id="u5236_u4F5C_u6700_u5C0F_u6587_u4EF6_u7CFB_u7EDF"><a href="#u5236_u4F5C_u6700_u5C0F_u6587_u4EF6_u7CFB_u7EDF" class="headerlink" title="制作最小文件系统"></a>制作最小文件系统</h3><p>移植内核，制作文件系统，我们的最终目的是在对应硬件平台上运行我们的应用程序，下面我们制作一个满足我们要求的最小基本文件系统.</p>
 <ul>
-<li><p>解压busybox源码，进入源码目录，修改Makefile中CROSS_COMPILE添加交叉编译工具： </p>
+<li><p>解压busybox源码，进入源码目录，修改Makefile中CROSS_COMPILE添加交叉编译工具：</p>
 <pre><code>CROSS\_COMPILE = arm-linux-
 </code></pre></li>
 <li><p>配置编译选项，运行make menuconfig对busybox进行配置，可以直接只用默认配置，这里我使用默认配置。</p>
-<pre><code>make menuconfig  
+<pre><code>make menuconfig
 </code></pre></li>
-<li><p>编译，运行make命令：  </p>
+<li><p>编译，运行make命令：</p>
 <pre><code>make
 </code></pre></li>
 <li><p>运行make install，在busybox根目录下生产_install目录  </p>
@@ -348,21 +348,21 @@ Miscellaneous filesystems ---&gt;
 <p>busybox配置编译工作完成，下面制作最小基础文件系统；</p>
 <ul>
 <li><p>创建console和null设备文件，在_install目录下新建dev目录，再执行：  </p>
-<pre><code>mkdir dev  
+<pre><code>mkdir dev
 sudo mknod console c 5 1  
-sudo mknod null c 1 3  
+sudo mknod null c 1 3
 </code></pre></li>
 <li><p>创建/etc/inittab文件，在_install目录下新建etc目录，在etc目录下新建inittab文件，在inittab文件中添加如下内容：  </p>
-<pre><code>mkdir etc  
-cd etc  
+<pre><code>mkdir etc
+cd etc
 touch inittab  
 console::askfirst:-/bin/sh  
 </code></pre></li>
 <li><p>添加C动态库文件，busybox使用动态库方式编译后，需要添加库文件，如果busybox采用静态库方式编译，则不需要添加库文件：  </p>
-<pre><code>mkdir lib  
+<pre><code>mkdir lib
 cp *.so xxx/_install/lib/ -d  
 </code></pre></li>
-<li><p>制作yaffs2文件系统：  </p>
+<li><p>制作yaffs2文件系统：</p>
 <pre><code>mkyaffs2image _install yaffs2.bin
 </code></pre></li>
 </ul>
@@ -428,7 +428,7 @@ cp ~/work/tool/opt/EmbedSky/4.3.3/arm-none-linux-gnueabi/libc/thumb2/usr/lib/lib
 <li><p>修改inittab文件，增加如下内容：</p>
 <p>   ::sysinit:/etc/init.d/rcS</p>
 </li>
-<li><p>创建/etc/fstab文件，并增加如下内容：  </p>
+<li><p>创建/etc/fstab文件，并增加如下内容：</p>
 <p>   proc            /proc           proc    defaults        0       0</p>
 </li>
 <li><p>给/etc/init.d/rcS文件添加可执行权限</p>
@@ -440,7 +440,7 @@ cp ~/work/tool/opt/EmbedSky/4.3.3/arm-none-linux-gnueabi/libc/thumb2/usr/lib/lib
 <li><p>修改/etc/fstab增加如下内容：</p>
 <p>   tmpfs           /tmp            tmpfs   defaults        0       0<br>   sysfs           /sys            sysfs   defaults        0       0<br>   tmpfs           /dev            tmpfs   defaults        0       0</p>
 </li>
-<li><p>修改/etc/init.d/rcS文件，新增如下内容：  </p>
+<li><p>修改/etc/init.d/rcS文件，新增如下内容：</p>
 <pre><code>mkdir /dev/pts
 mount -t devpts devpts /dev/pts
 echo /sbin/mdev &gt; /proc/sys/kernel/hotplug
@@ -454,7 +454,7 @@ mdev -s
 <li><p>/etc/fstab</p>
 <h1 id="device_mount-point_type_options_dump_fsck_order"><a href="#device_mount-point_type_options_dump_fsck_order" class="headerlink" title="device        mount-point     type    options         dump    fsck order"></a>device        mount-point     type    options         dump    fsck order</h1><p>   proc            /proc           proc    defaults        0       0<br>   tmpfs           /tmp            tmpfs   defaults        0       0<br>   sysfs           /sys            sysfs   defaults        0       0<br>   tmpfs           /dev            tmpfs   defaults        0       0</p>
 </li>
-<li><p>/etc/init.d/rcS  </p>
+<li><p>/etc/init.d/rcS</p>
 <p>   mount -a<br>   mkdir /dev/pts<br>   mount -t devpts devpts /dev/pts<br>   echo /sbin/mdev &gt; /proc/sys/kernel/hotplug<br>   mdev -s</p>
 </li>
 </ul>
