@@ -216,15 +216,335 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/04/14/ARM汇编指令之LDR、STR和MOV指令/" itemprop="url">
+                  ARM汇编指令之LDR、STR和MOV指令
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-04-14T10:47:10+08:00" content="2016-04-14">
+              2016-04-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/ARM嵌入式编程/" itemprop="url" rel="index">
+                    <span itemprop="name">ARM嵌入式编程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/14/ARM汇编指令之LDR、STR和MOV指令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/14/ARM汇编指令之LDR、STR和MOV指令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
+        
+          <span itemprop="articleBody">
+            
+            LDR指令：LDR r0, =label用于加载立即数或者一个地址值到指定寄存器中;如果label是立即数: 
+LDR r0, =0x123        ;将0x123存入r0中
+如果name是一个标识符：
+LDR r0, =label_1    ;将label_1所指向的地址值存入r0中
+LDR r0, [r1]        ;将R1中的值存到r0中
+LDR r1, [r2, #16]   
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/04/14/ARM汇编指令之LDR、STR和MOV指令/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/04/12/ARM汇编指令之LOAD-STORE指令/" itemprop="url">
+                  ARM汇编指令之LOAD-STORE指令
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-04-12T10:47:10+08:00" content="2016-04-12">
+              2016-04-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/ARM嵌入式编程/" itemprop="url" rel="index">
+                    <span itemprop="name">ARM嵌入式编程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/12/ARM汇编指令之LOAD-STORE指令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/12/ARM汇编指令之LOAD-STORE指令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            load-store指令用于在存储器和处理器寄存器之间传输数据。共有3中类型的load-store指令：单寄存器传输指令、多寄存器传输指令和交换指令。
+1. 单寄存器传送指令该类指令用于把单一的数据传入或者传出一个寄存器。支持的数据类型有字（32位）、半字（16位）和字节。
+;读数据到r0
+LDR r0, [r1]        ; = LDR r0, [r1, #0] 从一个以寄存器r1内容为地
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/04/12/ARM汇编指令之LOAD-STORE指令/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/04/10/ARM编程之高效C编程 /" itemprop="url">
+                  ARM编程之高效C编程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-04-10T10:47:10+08:00" content="2016-04-10">
+              2016-04-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/ARM嵌入式编程/" itemprop="url" rel="index">
+                    <span itemprop="name">ARM嵌入式编程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/10/ARM编程之高效C编程 /#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/10/ARM编程之高效C编程 /" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            5.1 C编译器及其优化概述5.2 基本的C数据类型ARM处理器内部是32位寄存器和32位的数据处理操作。其体系结构是RISC load/store结构。数据在进行使用前必须先将其从内存装载到内部寄存器，任何算术或者逻辑指令都不能直接在存储器里进行操作。ARM体系结构支持的load/store指令：比ARMv4早的ARM处理器不能很好的处理有符号的8位或者任何16位数，因此，在ARM C编译器中定
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/04/10/ARM编程之高效C编程 /" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -335,6 +655,564 @@ ADC 带进位的32位数加法ADD 32位数相加AND 32位数的逻辑与B 在32M
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/11/s3c2440-支持RTL8188EU无线网卡(五)/" itemprop="url">
+                  s3c2440-支持RTL8188EU无线网卡(五)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-11T11:34:20+08:00" content="2015-12-11">
+              2015-12-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/linux驱动/" itemprop="url" rel="index">
+                    <span itemprop="name">linux驱动</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/11/s3c2440-支持RTL8188EU无线网卡(五)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/11/s3c2440-支持RTL8188EU无线网卡(五)/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            
+内核版本: linux-2.6.30.4CPU型号： s3c2440WIFI硬件型号： RTL8188euwpa_supplicant：wpa_supplicant-2.5openssl: openssl-0.9.8za目标：支持RTL8188EUS无线网卡，为硬件提供网络功能
+要支持RTL8188EU WIFI无线网卡，我们必须首先获取RTL8188驱动，到gitbub下RTL8188载驱动，
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/12/11/s3c2440-支持RTL8188EU无线网卡(五)/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/11/s3c2440-支持DM9000网卡(四)/" itemprop="url">
+                  s3c2440-支持DM9000网卡(四)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-11T10:01:01+08:00" content="2015-12-11">
+              2015-12-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/linux驱动/" itemprop="url" rel="index">
+                    <span itemprop="name">linux驱动</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/11/s3c2440-支持DM9000网卡(四)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/11/s3c2440-支持DM9000网卡(四)/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            内核版本: linux-2.6.30.4目标：支持DM9000网卡，为硬件提供网络功能
+
+内核源码中已经有DM9000网卡驱动了，我们只需要做一些修改即可。
+arch/arm/mach-s3c2440/mach-smdk2440.c文件">修改 arch/arm/mach-s3c2440/mach-smdk2440.c文件
+修改mach-smdk2440.c文件，增加如下内容：
+#include 
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/12/11/s3c2440-支持DM9000网卡(四)/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/10/s3c2440-支持yaffs2文件系统(三)/" itemprop="url">
+                  s3c2440-支持yaffs2文件系统(三)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-10T15:22:10+08:00" content="2015-12-10">
+              2015-12-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/linux驱动/" itemprop="url" rel="index">
+                    <span itemprop="name">linux驱动</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/10/s3c2440-支持yaffs2文件系统(三)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/10/s3c2440-支持yaffs2文件系统(三)/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            内核版本: linux-2.6.30.4busybox版本： busybox-1.23.2目标：内核支持yaffs2文件系统，使用busybox制作最小文件系统
+
+首先让内核支持yaffs2文件系统，然后使用busybox制作最小文件系统.
+让内核支持yaffs2文件系统
+下载yaffs2源码并解压，进入源码目录：
+tar zxvf yaffs2.tar.gz
+cd yaffs2
+
+给内核打上ya
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/12/10/s3c2440-支持yaffs2文件系统(三)/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/10/s3c2440-支持NANDFLASH(二)/" itemprop="url">
+                  s3c2440-NANDFLASH支持（二）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-10T12:08:10+08:00" content="2015-12-10">
+              2015-12-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/linux驱动/" itemprop="url" rel="index">
+                    <span itemprop="name">linux驱动</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/10/s3c2440-支持NANDFLASH(二)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/10/s3c2440-支持NANDFLASH(二)/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            内核版本: linux-2.6.30.4目标：配置内核支持NANDFLASH
+
+在前面熟悉了内核编译的基本方法后，现在来让内核支持NANDFLASH
+修改smdk_default_nand_part变量这里我们要使NandFlash驱动同时支持64M，256M或更高容量。修改arch/arm/plat-s3c24xx/common-smdk.c文件，找到smdk_default_nand_part
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/12/10/s3c2440-支持NANDFLASH(二)/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/10/s3c2440-内核编译(一)/" itemprop="url">
+                  s3c2440-内核编译(一)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-10T10:47:10+08:00" content="2015-12-10">
+              2015-12-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/linux驱动/" itemprop="url" rel="index">
+                    <span itemprop="name">linux驱动</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/10/s3c2440-内核编译(一)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/10/s3c2440-内核编译(一)/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            解压源码，进入源码目录tar xjvf linux-2.6.31.bz2  
+cd linux-2.6.30.4  
+修改源码Makefile主要是修改ARCH和CROSS_COMPILE选项
+ARCH ?= arm  
+CROSS_COMPILE ?= arm-linux-  
+修改时钟修改arch/arm/mach-s3c2440/mach-smdk2440.c 的smdk2440_map_i
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/12/10/s3c2440-内核编译(一)/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
 
   </section>
 
@@ -377,14 +1255,14 @@ ADC 带进位的32位数加法ADD 32位数相加AND 32位数的逻辑与B 在32M
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>

@@ -1,0 +1,833 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="5.1 C编译器及其优化概述5.2 基本的C数据类型ARM处理器内部是32位寄存器和32位的数据处理操作。其体系结构是RISC load/store结构。数据在进行使用前必须先将其从内存装载到内部寄存器，任何算术或者逻辑指令都不能直接在存储器里进行操作。ARM体系结构支持的load/store指令：比ARMv4早的ARM处理器不能很好的处理有符号的8位或者任何16位数，因此，在ARM C编译器中定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARM编程之高效C编程">
+<meta property="og:url" content="http://www.eastcn.me/2016/04/10/ARM编程之高效C编程 /index.html">
+<meta property="og:site_name" content="SAR'S BLOG">
+<meta property="og:description" content="5.1 C编译器及其优化概述5.2 基本的C数据类型ARM处理器内部是32位寄存器和32位的数据处理操作。其体系结构是RISC load/store结构。数据在进行使用前必须先将其从内存装载到内部寄存器，任何算术或者逻辑指令都不能直接在存储器里进行操作。ARM体系结构支持的load/store指令：比ARMv4早的ARM处理器不能很好的处理有符号的8位或者任何16位数，因此，在ARM C编译器中定">
+<meta property="og:image" content="http://i.imgur.com/9Drk4OI.jpg">
+<meta property="og:image" content="http://i.imgur.com/h08HGX0.jpg">
+<meta property="og:image" content="http://i.imgur.com/AWNymTJ.jpg">
+<meta property="og:image" content="http://i.imgur.com/pjlKkHt.jpg">
+<meta property="og:image" content="http://i.imgur.com/uOWXwO5.jpg">
+<meta property="og:image" content="http://i.imgur.com/lKBrLb6.jpg">
+<meta property="og:updated_time" content="2016-04-20T10:22:23.980Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ARM编程之高效C编程">
+<meta name="twitter:description" content="5.1 C编译器及其优化概述5.2 基本的C数据类型ARM处理器内部是32位寄存器和32位的数据处理操作。其体系结构是RISC load/store结构。数据在进行使用前必须先将其从内存装载到内部寄存器，任何算术或者逻辑指令都不能直接在存储器里进行操作。ARM体系结构支持的load/store指令：比ARMv4早的ARM处理器不能很好的处理有符号的8位或者任何16位数，因此，在ARM C编译器中定">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> ARM编程之高效C编程 | SAR'S BLOG </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">SAR'S BLOG</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">just do it!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-question-circle fa-fw"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'XEiyJwjaqyW-1q_v5hRL','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ARM编程之高效C编程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-04-10T10:47:10+08:00" content="2016-04-10">
+              2016-04-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/ARM嵌入式编程/" itemprop="url" rel="index">
+                    <span itemprop="name">ARM嵌入式编程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/10/ARM编程之高效C编程 /#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/10/ARM编程之高效C编程 /" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="5-1_C_u7F16_u8BD1_u5668_u53CA_u5176_u4F18_u5316_u6982_u8FF0"><a href="#5-1_C_u7F16_u8BD1_u5668_u53CA_u5176_u4F18_u5316_u6982_u8FF0" class="headerlink" title="5.1 C编译器及其优化概述"></a>5.1 C编译器及其优化概述</h1><h1 id="5-2__u57FA_u672C_u7684C_u6570_u636E_u7C7B_u578B"><a href="#5-2__u57FA_u672C_u7684C_u6570_u636E_u7C7B_u578B" class="headerlink" title="5.2 基本的C数据类型"></a>5.2 基本的C数据类型</h1><p>ARM处理器内部是32位寄存器和32位的数据处理操作。其体系结构是RISC load/store结构。数据在进行使用前必须先将其从内存装载到内部寄存器，任何算术或者逻辑指令都不能直接在存储器里进行操作。<br>ARM体系结构支持的load/store指令：<br><img src="http://i.imgur.com/9Drk4OI.jpg" alt=""><br>比ARMv4早的ARM处理器不能很好的处理有符号的8位或者任何16位数，因此，在ARM C编译器中定义的char类型是8位无符号的，而不像其他编译器默认是8位有符号的。<br>在gcc中命令行选项-fsigned-char可以将char转换成有符号类型<br><img src="http://i.imgur.com/h08HGX0.jpg" alt=""></p>
+<h2 id="5-2-1__u5C40_u90E8_u53D8_u91CF_u7C7B_u578B"><a href="#5-2-1__u5C40_u90E8_u53D8_u91CF_u7C7B_u578B" class="headerlink" title="5.2.1 局部变量类型"></a>5.2.1 局部变量类型</h2><p>基于ARMv4体系结构的处理器能高效地装载和存储8位，16位和32位数据，但是，大多数ARM数据处理操作都是32位的。基于这个原因，局部变量应尽可能使用32位的数据类型int或者long。即可在处理8位或者16位数时，也应避免使用char或者short数据类型作为局部变量。</p>
+<h2 id="5-2-2__u51FD_u6570_u53C2_u6570_u7C7B_u578B"><a href="#5-2-2__u51FD_u6570_u53C2_u6570_u7C7B_u578B" class="headerlink" title="5.2.2 函数参数类型"></a>5.2.2 函数参数类型</h2><p>使用char或者short类型的函数参数和返回值都会产生额外的开销，导致性能的下降，并增加了代码尺寸，所有，即使是传输一个8位的数据，函数参数和返回值使用int类型也会更加有效。</p>
+<h2 id="5-2-3__u6709_u7B26_u53F7_u548C_u65E0_u7B26_u5408_u53F7_u6570"><a href="#5-2-3__u6709_u7B26_u53F7_u548C_u65E0_u7B26_u5408_u53F7_u6570" class="headerlink" title="5.2.3 有符号和无符合号数"></a>5.2.3 有符号和无符合号数</h2><p>对于加、减、乘法运算，有符号和无符号的执行效率没有任何差别，对于除法，使用无符号数效率会更高。编译器可以将2的倍数的无符号数除法直接用右移来替代。</p>
+<p>C数据类型的有效用法：</p>
+<ul>
+<li>对于存放在寄存器中的局部变量，除了8位或16位的算术模运行算外，尽量不要使用char和short类型，而使用有符号或者无符号int类型。除法运行时使用无符号数执行速度更快。</li>
+<li>对于存放在主存储器中的数组和全局变量，在满足数据大小的前提下，应尽可能使用小尺寸的数据类型，这样可以节省存储空间，ARMv4体系结构可以有效地装载和存储所有宽度的数据，并可以使用递增数组指针来有效地访问数组。对于short类型数组，要避免使用数组基地址的偏移量，因为LDRH指令不支持偏移量寻址。</li>
+<li>通过读取数组或全局变量并赋给不同类型的局部变量时，或者把局部变量写入不同类型的数据或者全局变量时，要进行显示数据类型转换。这种转换使编译器可以明确，快速地处理，把存储器中数据宽度比较窄的数据类型扩展，并赋给寄存器中较宽的类型。通过打开编译器的隐式数据宽度窄化警告(implicit narrowing cast warning)选项，可以观察到隐式数据类型转换。</li>
+<li>由于隐式或者显示的数据类型转换通常会有额外的指令周期开销，所以在表达式中应尽量避免使用。load和store指令一般不会产生额外的转换开销，因为load和store指令是自动完成数据类型转换的。</li>
+<li>对应函数参数和返回值应尽量避免使用char和short类型，即使参数范围比较小，也应该使用int类型，以防止编译器做不必要的类型转换。</li>
+</ul>
+<h1 id="5-3_C_u5FAA_u73AF_u7ED3_u6784"><a href="#5-3_C_u5FAA_u73AF_u7ED3_u6784" class="headerlink" title="5.3 C循环结构"></a>5.3 C循环结构</h1><p>主要针对ARM上处理for和while循环最有效的方法。</p>
+<h2 id="5-3-1__u56FA_u5B9A_u6B21_u6570_u7684_u5FAA_u73AF"><a href="#5-3-1__u56FA_u5B9A_u6B21_u6570_u7684_u5FAA_u73AF" class="headerlink" title="5.3.1 固定次数的循环"></a>5.3.1 固定次数的循环</h2><p>对于固定次数的循环，不论是有符号还是无符号的循环计数值，都应使用i！=0作为循环的结束条件。对有符号数i，这比使用条件i &gt; 0少了一条指令。</p>
+<h2 id="5-3-2__u4E0D_u5B9A_u6B21_u6570_u7684_u5FAA_u73AF"><a href="#5-3-2__u4E0D_u5B9A_u6B21_u6570_u7684_u5FAA_u73AF" class="headerlink" title="5.3.2 不定次数的循环"></a>5.3.2 不定次数的循环</h2><h2 id="5-3-3__u5FAA_u73AF_u5C55_u5F00"><a href="#5-3-3__u5FAA_u73AF_u5C55_u5F00" class="headerlink" title="5.3.3 循环展开"></a>5.3.3 循环展开</h2><h2 id="u5C0F_u7ED3_uFF1A"><a href="#u5C0F_u7ED3_uFF1A" class="headerlink" title="小结："></a>小结：</h2><ul>
+<li>使用减计数到零的循环结构，这样编译器不需要分配一个额外的寄存器来保存循环终止值，而且与0比较的指令也可以省略；</li>
+<li>使用无符号的循环计数值，循环继续的条件为 i！= 0而不是 i &gt; 0，这样可以保证循环开销只有两条指令；</li>
+<li>如果事先知道循环至少会执行一次，那么使用do-while循环比for循环好，这样可以使编译器省去检查循环计数值是否为零的步骤；</li>
+<li>展开重要循环体可降低循环开销，但不要过度展开，如果循环体的开销对整个程序来说占的比例很小，那么循环展开反而会增加代码量并降低cache的性能；</li>
+<li>尽量使数组的大小是4或8的倍数，这个就可以容易地以2,4,8次等多种选择展开循环，而不需要担心剩余数组元素的问题。</li>
+</ul>
+<h1 id="5-4__u5BC4_u5B58_u5668_u7684_u5206_u914D"><a href="#5-4__u5BC4_u5B58_u5668_u7684_u5206_u914D" class="headerlink" title="5.4 寄存器的分配"></a>5.4 寄存器的分配</h1><p>编译器会试图对C函数中的每一个局部变量分配一个寄存器。如果几个局部变量不会交跌使用，那么编译器会对它们分配同一个寄存器。当局部变量多于可用的寄存器时，编译器会把多余的变量存储到堆栈，存放在堆栈（存储器）的变量称为溢出或者替换变量，与分配在寄存器的变量相比，对溢出变量的访问要慢的多。<br>为高效执行一个函数，应该做到：</p>
+<ul>
+<li>使溢出变量的数量最少；</li>
+<li>确保最重要的和经常用到的变量被分配在寄存器。<br><img src="http://i.imgur.com/AWNymTJ.jpg" alt=""><br><img src="http://i.imgur.com/pjlKkHt.jpg" alt=""></li>
+</ul>
+<h2 id="u5C0F_u7ED3_uFF1A-1"><a href="#u5C0F_u7ED3_uFF1A-1" class="headerlink" title="小结："></a>小结：</h2><ul>
+<li>应该尽量限制函数内部循环所用局部变量的数目，最多不超过12个，这样编译器就可以把这些变量都分配给ARM寄存器；</li>
+<li>可以引导编译器，通过查看是否属于最内层循环的变量来确定某个变量的重要性；</li>
+<li>尽量避免使用register关键字，而应依赖编译器正常的寄存器分配策略来分配。</li>
+</ul>
+<h1 id="5-5__u51FD_u6570_u8C03_u7528"><a href="#5-5__u51FD_u6570_u8C03_u7528" class="headerlink" title="5.5 函数调用"></a>5.5 函数调用</h1><p>ARM的过程调用标准（APCS）定义了如何通过寄存器传递参数和返回值。<br>函数中最前面的4个整型参数是通过ARM的前4个寄存器r0,r1,r2和r3来传递的，随后的整型参数时通过下降式满堆栈(full descending stack)来传递的。函数返回的整型数据通过寄存器r0来传递。<br><img src="http://i.imgur.com/uOWXwO5.jpg" alt=""><br>过程调用标准是4寄存器规则，带有4个或者更少参数的函数，要比多于4个参数的函数执行效率高得多。对带有少于4个参数的函数来说，编译器可以用寄存器传递所有的参数；而对于多于4个参数的函数，函数调用者和被调用者都必须通过访问堆栈来传递一些参数。<br>在C++中，一个对象方法的第一个参数总是this指针。这个参数是隐式的，并附加到其他显示参数。<br>如果一个函数的参数多于4个，或者C++中的显示参数多于3个，那么通常使用结构体，执行效率会更高。将相关的参数组织到一个结构体中，传递一个结构体指针来代替多个参数。<br>如果函数体很小，只用到很少的寄存器（局部变量很少），那么将调用函数和被调用函数放在同一个C文件中，编译器知道了被调用函数生成的代码，并以此对调用函数进行一些优化：</p>
+<ul>
+<li>调用函数不需要保护被调用函数没有用到的寄存器，因此，调用函数也不需要保护所有ATPCS占用的寄存器；</li>
+<li>如果被调用的函数很小，那么编译器可以在调用函数中内联被调用函数的代码，这样可以彻底去除函数调用的开销。</li>
+</ul>
+<h2 id="u5C0F_u7ED3"><a href="#u5C0F_u7ED3" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>尽量限制函数的参数，不要超过4个，这样函数调用的效率会更高。也可以将几个相关的参数组织在一个结构体中，用传递结构体指针来代替多个参数。</li>
+<li>把比较小的被调用函数和调用函数放在同一个源文件中，并且要先定义，后调用，编译器就可以优化函数调用或者内联较小的函数；</li>
+<li>对性能影响较大的重要函数可以使用关键字_inline进行内联</li>
+</ul>
+<h1 id="5-6__u6307_u9488_u522B_u540D"><a href="#5-6__u6307_u9488_u522B_u540D" class="headerlink" title="5.6 指针别名"></a>5.6 指针别名</h1><p>当两个指针指向同一个地址对象时，这2个指针被称作该对象的别名(alias).<br>避免指针别名</p>
+<ul>
+<li>不要依赖编译器来消除包含存储器访问的公共子表达式，而应建立一个新的局部变量来保存这个表达式的值，这样可以保证只对这个表达式求一次值。</li>
+<li>避免使用局部变量的地址，否则对这个变量的访问效率会比较低。</li>
+</ul>
+<h1 id="5-7__u7ED3_u6784_u4F53_u5B89_u6392"><a href="#5-7__u7ED3_u6784_u4F53_u5B89_u6392" class="headerlink" title="5.7 结构体安排"></a>5.7 结构体安排</h1><p>ARM使用结构体有2个问题需要考虑：<strong>结构体地址边界对齐和结构体总的大小。</strong><br>对于ARMv5TE及其以上的体系结构，load和store指令仅仅保证从与访问宽度尺寸对齐的地址来装载和存储数据。基于这个原因，ARM编译器将会自动把一个结构体的起始地址与该结构体中最大访问数据宽度（通常是4或者8字节）的倍数对齐，并通过插入填充位把结构体地址边界与他们的存储宽度相对齐。<br><img src="http://i.imgur.com/lKBrLb6.jpg" alt=""><br>对于枚举类型，不同的编译器根据枚举的范围，对于枚举类型会自动分配不同的空间大小。为避免这种不确定性，最好在API使用的结构体中避免使用enum类型。<br>结构体尺寸和结构体中各元素的偏移量，这是一个在Thumb指令集下编译时最为敏感的问题。<br>遵循下面的规则来组织元素构成一个结构体，可以获得最高的效率：</p>
+<ul>
+<li>把所有8位大小的元素安排在结构体的前面；</li>
+<li>依次安排16位、32位和64位的元素；</li>
+<li>把所有数组和比较大的元素安排在结构体的最后；</li>
+<li>对于一条指令，如果结构体太大而不能访问所有的元素，那么把元素组织到一个子结构体中。编译器可以维持单独的子结构指针。</li>
+</ul>
+<h2 id="u5C0F_u7ED3_uFF1A-2"><a href="#u5C0F_u7ED3_uFF1A-2" class="headerlink" title="小结："></a>小结：</h2><ul>
+<li>结构体元素要安装元素的大小来排列，以最小的元素放在开始，最大的元素安排在最后；</li>
+<li>避免使用很大的结构体，可以用层次化的小结构体代替;</li>
+<li>为了提供可移植性，人工对API的结构体增加填充位，这样，结构体的安排将不会依赖于编译器；</li>
+<li>在API的结构体中要谨慎使用枚举（enum）类型。一个枚举类型的大小是编译器相关的。</li>
+</ul>
+<h1 id="5-8__u4F4D_u57DF"><a href="#5-8__u4F4D_u57DF" class="headerlink" title="5.8 位域"></a>5.8 位域</h1><ul>
+<li>避免使用位域，而使用#define或者enum来定义屏蔽位；</li>
+<li>使用整形逻辑运算ADN.OR、“异或”操作和屏蔽对位域进行测试、取反和设置操作。这些操作编译效率高，还可以同时对多个位域进行测试、取反和设置。</li>
+</ul>
+<h1 id="5-9__u8FB9_u754C_u4E0D_u5BF9_u9F50_u6570_u636E_u548C_u5B57_u8282_u6392_u5217_u65B9_u5F0F_uFF08_u5927/_u5C0F_u7AEF_uFF09"><a href="#5-9__u8FB9_u754C_u4E0D_u5BF9_u9F50_u6570_u636E_u548C_u5B57_u8282_u6392_u5217_u65B9_u5F0F_uFF08_u5927/_u5C0F_u7AEF_uFF09" class="headerlink" title="5.9 边界不对齐数据和字节排列方式（大/小端）"></a>5.9 边界不对齐数据和字节排列方式（大/小端）</h1><p>ARM的load和store指令假定地址是正在装载或者存储的数据类型长度的倍数，如果装载和存储的地址与数据类型边界不对齐，那么可能产生异常的结果，例如数据异常或者装载了一个错位的值。对于质量好、可移植的代码，应尽量避免使用边界不对齐的访问。</p>
+<ul>
+<li>尽量避免使用边界不对齐的数据；</li>
+<li>使用类型char *可以指向任意字节边界的数据。通过读字节来访问数据，使用逻辑操作来组合数据，这样代码就不会依赖于边界是否对齐或者ARM的字节排列方式的配置；</li>
+<li>为了快速访问边界不对齐的结构体，可以根据指针边界和处理器的字节排序方式写出不同的程序变体。</li>
+</ul>
+<h1 id="5-10__u9664_u6CD5"><a href="#5-10__u9664_u6CD5" class="headerlink" title="5.10 除法"></a>5.10 除法</h1><p>ARM硬件不支持除法指令，编译器通过调用C库函数来实现除法运算的。</p>
+<ul>
+<li>进可能避免使用除法。对环形缓冲区的处理可以不使用除法；</li>
+<li>如果不能避免除法运算，那么尽可能考虑使用除法程序同时产生商n/d和余数n%d的好处；</li>
+</ul>
+<h1 id="5-11__u6D6E_u70B9_u8FD0_u7B97"><a href="#5-11__u6D6E_u70B9_u8FD0_u7B97" class="headerlink" title="5.11 浮点运算"></a>5.11 浮点运算</h1><p>大多数ARM处理器硬件上不支持浮点运算</p>
+<h1 id="5-12__u5185_u8054_u51FD_u6570_u548C_u5185_u5D4C_u6C47_u7F16"><a href="#5-12__u5185_u8054_u51FD_u6570_u548C_u5185_u5D4C_u6C47_u7F16" class="headerlink" title="5.12 内联函数和内嵌汇编"></a>5.12 内联函数和内嵌汇编</h1><ul>
+<li>使用内联函数来声明新的操作或者C编译器不支持的基本操作；</li>
+<li>使用内嵌汇编可以利用到C编译器不支持的ARM指令，比如协处理器指令或者ARMv5E扩展指令</li>
+</ul>
+<h1 id="5-13__u79FB_u690D_u95EE_u9898"><a href="#5-13__u79FB_u690D_u95EE_u9898" class="headerlink" title="5.13 移植问题"></a>5.13 移植问题</h1><ul>
+<li>char类型 在ARM上，默认char是无符号的，而不像许多其它处理器那样认为是有符号的。一个经常配到的问题是：在循环体中，使用char类型的循环计数值i，循环继续条件是i &gt;= 0，这在ARM上就变成了无穷循环。在这种情况下，编译器会出现一个“无符号数与0比较(unsigned comparison with zero)”的警告，可通过编译器选项使得char变成有符号的类型，或者把循环计数值改成int类型。</li>
+<li>int类型 一些老的体系结构体int类型是16位的，当这些16位的int类型需要移植到ARM的32位int类型上时，可能会带来一些问题。</li>
+<li>不对齐的数据指针 一些处理器支持从不对齐的地址装载short和int类型数据的值，C程序可以直接操作指针，这样可能会造成边界不对齐，比如，把一个char <em>转换成int </em>。为发现这样的问题，在ARM上运行程序要使用边界检查（配置编译器选项）。</li>
+<li>字节排列方式(大端/小端)</li>
+<li>函数原型 应该总是使用ANSI原型</li>
+<li>位域的使用 </li>
+<li>枚举的使用 虽然enmu是可以移植的，但不同的编译器会对一个枚举类型分配不同数据的字节。</li>
+<li>内嵌汇编 </li>
+<li>volatile关键字</li>
+</ul>
+<h1 id="5-14__u603B_u7ED3"><a href="#5-14__u603B_u7ED3" class="headerlink" title="5.14 总结"></a>5.14 总结</h1><p>涉及性能的关键点：</p>
+<ul>
+<li>对局部变量、函数参数和返回值要使用signed和unsigned int类型。这样可以避免类型转换，而且可以高效地使用ARM的32位数据操作指令；</li>
+<li>最高效的循环形式是减计数到零的do-while循环；</li>
+<li>展开重要的循环来减小循环的开销；</li>
+<li>不要依赖编译器来优化掉重复的存储器访问。指针别名会阻止编译器的这种优化；</li>
+<li>尽可能把函数的个数限制在4个以内，如果函数参数都存放在寄存器内，那么函数调用就会快得多；</li>
+<li>按元素尺寸从小到大排列的方式来安排结构体，特别是在Thumb模式下的编译；</li>
+<li>不要使用位域，可以用掩码和逻辑操作来替代；</li>
+<li>避免除法，可以使用倒数的乘法来替代；</li>
+<li>避免边界不对齐的数据。如果数据有可能边界不对齐，那么就要使用char *指针类型来访问；</li>
+<li>在C编译器中使用内嵌汇编可以利用到C编译器本来不支持的指令或者优化。</li>
+</ul>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/03/ARM汇编/" rel="next" title="ARM指令集">
+                <i class="fa fa-chevron-left"></i> ARM指令集
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/12/ARM汇编指令之LOAD-STORE指令/" rel="prev" title="ARM汇编指令之LOAD-STORE指令">
+                ARM汇编指令之LOAD-STORE指令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+       <!-- ��˵���ۿ� start -->
+    <div class="ds-thread" data-thread-key="<%= post.layout %>-<%= post.slug %>" data-title="<%= post.title %>" data-url="<%= page.permalink %>"></div>
+    <!-- ��˵���ۿ� end -->
+    <!-- ��˵����JS���� start (һ����ҳֻ������һ��) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'<%= config.duoshuo_shortname %>'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- ��˵����JS���� end -->
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="sar" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">sar</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Don't be afraid to fail, Be afraid not to try!</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zwxcp" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/chen999" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> weibo
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#5-1_C_u7F16_u8BD1_u5668_u53CA_u5176_u4F18_u5316_u6982_u8FF0"><span class="nav-number">1.</span> <span class="nav-text">5.1 C编译器及其优化概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-2__u57FA_u672C_u7684C_u6570_u636E_u7C7B_u578B"><span class="nav-number">2.</span> <span class="nav-text">5.2 基本的C数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-1__u5C40_u90E8_u53D8_u91CF_u7C7B_u578B"><span class="nav-number">2.1.</span> <span class="nav-text">5.2.1 局部变量类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-2__u51FD_u6570_u53C2_u6570_u7C7B_u578B"><span class="nav-number">2.2.</span> <span class="nav-text">5.2.2 函数参数类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-3__u6709_u7B26_u53F7_u548C_u65E0_u7B26_u5408_u53F7_u6570"><span class="nav-number">2.3.</span> <span class="nav-text">5.2.3 有符号和无符合号数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-3_C_u5FAA_u73AF_u7ED3_u6784"><span class="nav-number">3.</span> <span class="nav-text">5.3 C循环结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-1__u56FA_u5B9A_u6B21_u6570_u7684_u5FAA_u73AF"><span class="nav-number">3.1.</span> <span class="nav-text">5.3.1 固定次数的循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-2__u4E0D_u5B9A_u6B21_u6570_u7684_u5FAA_u73AF"><span class="nav-number">3.2.</span> <span class="nav-text">5.3.2 不定次数的循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-3__u5FAA_u73AF_u5C55_u5F00"><span class="nav-number">3.3.</span> <span class="nav-text">5.3.3 循环展开</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5C0F_u7ED3_uFF1A"><span class="nav-number">3.4.</span> <span class="nav-text">小结：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-4__u5BC4_u5B58_u5668_u7684_u5206_u914D"><span class="nav-number">4.</span> <span class="nav-text">5.4 寄存器的分配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u5C0F_u7ED3_uFF1A-1"><span class="nav-number">4.1.</span> <span class="nav-text">小结：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-5__u51FD_u6570_u8C03_u7528"><span class="nav-number">5.</span> <span class="nav-text">5.5 函数调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u5C0F_u7ED3"><span class="nav-number">5.1.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-6__u6307_u9488_u522B_u540D"><span class="nav-number">6.</span> <span class="nav-text">5.6 指针别名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-7__u7ED3_u6784_u4F53_u5B89_u6392"><span class="nav-number">7.</span> <span class="nav-text">5.7 结构体安排</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u5C0F_u7ED3_uFF1A-2"><span class="nav-number">7.1.</span> <span class="nav-text">小结：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-8__u4F4D_u57DF"><span class="nav-number">8.</span> <span class="nav-text">5.8 位域</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-9__u8FB9_u754C_u4E0D_u5BF9_u9F50_u6570_u636E_u548C_u5B57_u8282_u6392_u5217_u65B9_u5F0F_uFF08_u5927/_u5C0F_u7AEF_uFF09"><span class="nav-number">9.</span> <span class="nav-text">5.9 边界不对齐数据和字节排列方式（大/小端）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-10__u9664_u6CD5"><span class="nav-number">10.</span> <span class="nav-text">5.10 除法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-11__u6D6E_u70B9_u8FD0_u7B97"><span class="nav-number">11.</span> <span class="nav-text">5.11 浮点运算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-12__u5185_u8054_u51FD_u6570_u548C_u5185_u5D4C_u6C47_u7F16"><span class="nav-number">12.</span> <span class="nav-text">5.12 内联函数和内嵌汇编</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-13__u79FB_u690D_u95EE_u9898"><span class="nav-number">13.</span> <span class="nav-text">5.13 移植问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-14__u603B_u7ED3"><span class="nav-number">14.</span> <span class="nav-text">5.14 总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sar</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zwxcp"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>

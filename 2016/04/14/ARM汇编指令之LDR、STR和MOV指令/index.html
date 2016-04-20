@@ -49,25 +49,31 @@
 
 
 
-<meta name="description" content="内核版本: linux-2.6.30.4目标：配置内核支持NANDFLASH
-
-在前面熟悉了内核编译的基本方法后，现在来让内核支持NANDFLASH
-修改smdk_default_nand_part变量这里我们要使NandFlash驱动同时支持64M，256M或更高容量。修改arch/arm/plat-s3c24xx/common-smdk.c文件，找到smdk_default_nand_part">
+<meta name="description" content="LDR指令：LDR r0, =label用于加载立即数或者一个地址值到指定寄存器中;如果label是立即数: 
+LDR r0, =0x123        ;将0x123存入r0中
+如果name是一个标识符：
+LDR r0, =label_1    ;将label_1所指向的地址值存入r0中
+LDR r0, [r1]        ;将R1中的值存到r0中
+LDR r1, [r2, #16]">
 <meta property="og:type" content="article">
-<meta property="og:title" content="s3c2440-NANDFLASH支持（二）">
-<meta property="og:url" content="http://www.eastcn.me/2015/12/10/s3c2440-支持NANDFLASH(二)/index.html">
+<meta property="og:title" content="ARM汇编指令之LDR、STR和MOV指令">
+<meta property="og:url" content="http://www.eastcn.me/2016/04/14/ARM汇编指令之LDR、STR和MOV指令/index.html">
 <meta property="og:site_name" content="SAR'S BLOG">
-<meta property="og:description" content="内核版本: linux-2.6.30.4目标：配置内核支持NANDFLASH
-
-在前面熟悉了内核编译的基本方法后，现在来让内核支持NANDFLASH
-修改smdk_default_nand_part变量这里我们要使NandFlash驱动同时支持64M，256M或更高容量。修改arch/arm/plat-s3c24xx/common-smdk.c文件，找到smdk_default_nand_part">
-<meta property="og:updated_time" content="2015-12-11T02:57:03.007Z">
+<meta property="og:description" content="LDR指令：LDR r0, =label用于加载立即数或者一个地址值到指定寄存器中;如果label是立即数: 
+LDR r0, =0x123        ;将0x123存入r0中
+如果name是一个标识符：
+LDR r0, =label_1    ;将label_1所指向的地址值存入r0中
+LDR r0, [r1]        ;将R1中的值存到r0中
+LDR r1, [r2, #16]">
+<meta property="og:updated_time" content="2016-04-20T10:22:41.556Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="s3c2440-NANDFLASH支持（二）">
-<meta name="twitter:description" content="内核版本: linux-2.6.30.4目标：配置内核支持NANDFLASH
-
-在前面熟悉了内核编译的基本方法后，现在来让内核支持NANDFLASH
-修改smdk_default_nand_part变量这里我们要使NandFlash驱动同时支持64M，256M或更高容量。修改arch/arm/plat-s3c24xx/common-smdk.c文件，找到smdk_default_nand_part">
+<meta name="twitter:title" content="ARM汇编指令之LDR、STR和MOV指令">
+<meta name="twitter:description" content="LDR指令：LDR r0, =label用于加载立即数或者一个地址值到指定寄存器中;如果label是立即数: 
+LDR r0, =0x123        ;将0x123存入r0中
+如果name是一个标识符：
+LDR r0, =label_1    ;将label_1所指向的地址值存入r0中
+LDR r0, [r1]        ;将R1中的值存到r0中
+LDR r1, [r2, #16]">
 
 
 
@@ -79,7 +85,7 @@
   };
 </script>
 
-  <title> s3c2440-NANDFLASH支持（二） | SAR'S BLOG </title>
+  <title> ARM汇编指令之LDR、STR和MOV指令 | SAR'S BLOG </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -240,7 +246,7 @@
             
             
               
-                s3c2440-NANDFLASH支持（二）
+                ARM汇编指令之LDR、STR和MOV指令
               
             
           </h1>
@@ -249,8 +255,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2015-12-10T12:08:10+08:00" content="2015-12-10">
-              2015-12-10
+            <time itemprop="dateCreated" datetime="2016-04-14T10:47:10+08:00" content="2016-04-14">
+              2016-04-14
             </time>
           </span>
 
@@ -259,8 +265,8 @@
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/linux驱动/" itemprop="url" rel="index">
-                    <span itemprop="name">linux驱动</span>
+                  <a href="/categories/ARM嵌入式编程/" itemprop="url" rel="index">
+                    <span itemprop="name">ARM嵌入式编程</span>
                   </a>
                 </span>
 
@@ -275,8 +281,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/12/10/s3c2440-支持NANDFLASH(二)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/10/s3c2440-支持NANDFLASH(二)/" itemprop="commentsCount"></span>
+                <a href="/2016/04/14/ARM汇编指令之LDR、STR和MOV指令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/14/ARM汇编指令之LDR、STR和MOV指令/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -295,75 +301,28 @@
       
 
       
-        <span itemprop="articleBody"><p>内核版本: linux-2.6.30.4<br>目标：配置内核支持NANDFLASH</p>
-<hr>
-<p>在前面熟悉了内核编译的基本方法后，现在来让内核支持NANDFLASH</p>
-<h3 id="u4FEE_u6539smdk_default_nand_part_u53D8_u91CF"><a href="#u4FEE_u6539smdk_default_nand_part_u53D8_u91CF" class="headerlink" title="修改smdk_default_nand_part变量"></a>修改smdk_default_nand_part变量</h3><p>这里我们要使NandFlash驱动同时支持64M，256M或更高容量。<br>修改arch/arm/plat-s3c24xx/common-smdk.c文件，找到smdk_default_nand_part变量，该变量定义了系统的NAND flash分区信息，修改为如下值:</p>
-<pre><code>static struct mtd_partition smdk_default_nand_part[] = {  
-    #if defined(CONFIG_64M_NAND)  
-    [0] = {  
-        .name = &quot;boot&quot;,  
-        .offset = 0,  
-        .size = SZ_1M,
-    },  
-    [1] = {  
-        .name = &quot;kernel&quot;,  
-        .offset = SZ_1M + SZ_128K,  
-        .size = SZ_4M,  
-    },  
-    [2] = {  
-        .name = &quot;yaffs2&quot;,  
-        .offset = SZ_1M + SZ_128K + SZ_4M,  
-        .size = SZ_64M - SZ_4M - SZ_1M - SZ_128K,  
-    }  
-    #elif defined(CONFIG_256M_NAND)   
-    [0] = {  
-        .name    = &quot;boot&quot;,  
-        .size    = 0,  
-        .offset    = SZ_1M,  
-    },  
-    [1] = {  
-        .name    = &quot;kernel&quot;,  
-        .offset = SZ_1M + SZ_128K,  
-        .size    = SZ_4M,  
-    },  
-    [2] = {  
-        .name    = &quot;yaffs2&quot;,  
-        .offset = SZ_1M + SZ_128K + SZ_4M,  
-        .size    = SZ_256M - SZ_4M - SZ_1M - SZ_128K,  
-    }  
-    #endif  
-    }; 
-</code></pre><p>分区的名字可以随便取。</p>
-<h3 id="u4FEE_u6539Nand_u8BFB_u5199_u5339_u914D_u65F6_u95F4"><a href="#u4FEE_u6539Nand_u8BFB_u5199_u5339_u914D_u65F6_u95F4" class="headerlink" title="修改Nand读写匹配时间"></a>修改Nand读写匹配时间</h3><p>修改Nand读写匹配时间，这个改不改应该问题都不大，与Nand的读写特性相关的，根据查芯片资料得到的值，每种Nand的值都不一样；修改arch/arm/plat-s3c24xx/common-smdk.c文件，找到smdk_nand_info变量，修改为如下：</p>
-<pre><code>static struct s3c2410_platform_nand smdk_nand_info = {  
-    .tacls = 10,  
-    .twrph0 = 25,  
-    .twrph1 = 10,  
-    .nr_sets = ARRAY_SIZE(smdk_nand_sets),  
-    .sets = smdk_nand_sets,  
-};
-</code></pre><h3 id="u4FEE_u6539Kconfig_u6587_u4EF6_uFF0C_u589E_u52A0menuconfig_u914D_u7F6E_u9009_u9879"><a href="#u4FEE_u6539Kconfig_u6587_u4EF6_uFF0C_u589E_u52A0menuconfig_u914D_u7F6E_u9009_u9879" class="headerlink" title="修改Kconfig文件，增加menuconfig配置选项"></a>修改Kconfig文件，增加menuconfig配置选项</h3><p>修改 Kconfig 文件，在配置时选择NAND类型，修改driver/mtd/nand/Kconfig在适当位置添加如下内如：    </p>
-<pre><code>Choice
-    prompt &quot;Nand Flash Capacity Select&quot;
-    depends on MTD
-config 64M_NAND
-    boolean &quot;64M NAND For S3C2440&quot;
-    depends on MTD
-config 256M_NAND
-    boolean &quot;256M NAND For S3C2440&quot;
-    depends on MTD
-endchoice
-</code></pre><h3 id="u914D_u7F6E_u5185_u6838_uFF0C_u652F_u6301NANDFLASH"><a href="#u914D_u7F6E_u5185_u6838_uFF0C_u652F_u6301NANDFLASH" class="headerlink" title="配置内核，支持NANDFLASH"></a>配置内核，支持NANDFLASH</h3><p>运行make menuconfig，找到Device Drivers配置项；根据自己硬件的时间情况在“Nand Flash Capacity Select”配置项中选择NANDFLASH大小；</p>
-<pre><code>Device Drivers ---&gt;
-&lt;*&gt; Memory Technology Device (MTD) support ---&gt;
-    [*] MTD partitioning support
-&lt;*&gt; NAND Device Support ---&gt;
-    &lt;*&gt; NAND Flash support for S3C2410/S3C2440 SoC
-    [*] S3C2410 NAND Hardware ECC &lt;—----------- 这个一定要选上
-    Nand Flash Capacity Select(256M Nand For S3C2440)---&gt;
-</code></pre><h3 id="u7F16_u8BD1_u5185_u6838"><a href="#u7F16_u8BD1_u5185_u6838" class="headerlink" title="编译内核"></a>编译内核</h3><pre><code>make zImage
-</code></pre><p>将编译的内核烧写到硬件，观察内核启动信息中是否有NANDFLASH相关硬件信息。</p>
+        <span itemprop="articleBody"><h2 id="LDR_u6307_u4EE4_uFF1A"><a href="#LDR_u6307_u4EE4_uFF1A" class="headerlink" title="LDR指令："></a>LDR指令：</h2><p>LDR r0, =label<br>用于加载立即数或者一个地址值到指定寄存器中;<br>如果label是立即数: </p>
+<pre><code>LDR r0, =0x123        ;将0x123存入r0中
+</code></pre><p>如果name是一个标识符：</p>
+<pre><code>LDR r0, =label_1    ;将label_1所指向的地址值存入r0中
+LDR r0, [r1]        ;将R1中的值存到r0中
+LDR r1, [r2, #16]    ;将（r2 + 16）地址中的内容存到r1中
+LDR r1, [r2], #4    ;将r2地址中的内容存到r1，同时r2 = r2 + 4
+</code></pre><h2 id="STR_u6307_u4EE4_uFF1A"><a href="#STR_u6307_u4EE4_uFF1A" class="headerlink" title="STR指令："></a>STR指令：</h2><pre><code>STR r1, [r2]        ;将r1中的值存到r2所指定的地址中
+STR r1, [r2,#4]       ;将r1中的值存到r2+4所指定的地址中
+STR r1, [r2],#4      ;将r1中的值存到r2所指定的地址中, 同时r2=r2+4
+</code></pre><h2 id="MOV_u6307_u4EE4_uFF1A"><a href="#MOV_u6307_u4EE4_uFF1A" class="headerlink" title="MOV指令："></a>MOV指令：</h2><p>MOV指令执行的结果是把一个数N送到目标寄存器Rd，其中N可以是寄存器，也可以是立即数。MOV指令多用于设置初始值或者在寄存器间传递数据。<br>MOV指令用法：<br><strong>&lt;指令&gt; {<cond>} {S} Rd, N<br>MOV: 把一个32位数送到一个寄存器，Rd = N<br>MVN: 把一个32位数的“非”送到一个寄存器, Rd = ~N<br>通常N是一个寄存器Rm或者是一个使用#前缀的常量。</cond></strong></p>
+<pre><code>MOV r7, r5            ;r7 = r5
+MOV r7, r5, LSL #2    ;先将r5的值左移2位，在赋值给r7，r7 = r5*4＝(r5&lt;&lt;2)
+</code></pre><p>MOV是从一个寄存器或者移位的寄存器或者立即数的值传递到另外一个寄存器，从本质上是寄存器到寄存器的传递，为什么会有立即数，其实也是有限制的立即数，不是所有立即数都可以传递的，这个立即数要符合一个8位数循环右移偶数位的取值。原因是，MOV本身就是一条32bit指令，除了指令码本身，它不可能再带一个可以表示32bit的数字，所以用了其中的12bit来表示立即数，其中4bit表示移位的位数(循环右移，且数值x2)，8bit用来表示要移位的一个基数，可以看出，并不是所有数都可以表示成一个8bit数循环右移偶数位的。LDR和STR用来存取内存。</p>
+<h2 id="u5173_u4E8E_u201D_u7D22_u5F15_u504F_u79FB_u201D__u2014_pre-indexed_addressing_u548Cpost-indexed_addressing"><a href="#u5173_u4E8E_u201D_u7D22_u5F15_u504F_u79FB_u201D__u2014_pre-indexed_addressing_u548Cpost-indexed_addressing" class="headerlink" title="关于”索引偏移” — pre-indexed addressing和post-indexed addressing"></a>关于”索引偏移” — pre-indexed addressing和post-indexed addressing</h2><p>pre-indexed addressing：<br>是指地址经过运算不写回基址寄存器，比如：</p>
+<pre><code>mov r1, #0 
+STR r0, [r1, #0x10]   ; r1+0x10这个使用的是实际地址值，但是不回写入r1, 在此句之后，r1=0
+</code></pre><p>post-indexed addressing：<br>则回写到基址寄存器，比如：</p>
+<pre><code>mov r1, #0 
+STR r0, [r1]， #0x10  ;r1+0x10这个使用的是实际地址值，这个值回写入r1，此句之后，r1=0x10 
+</code></pre><h2 id="u5176_u4ED6"><a href="#u5176_u4ED6" class="headerlink" title="其他"></a>其他</h2><p>还有一点是关于ldr的，其实ldr可以装载一个32bit立即数的说法并不确切，因为实际上并不是这一条语句装载了一个32bit立即数，比如  ldr r1， =0x12345678  其实真正的汇编代码是将某个地址的值传递给r1，就是说需要一个地址存放0x12345678这个立即数，实际上可以看作是一条伪指令  而且如果这个立即数可以用mov指令的形式来表达，会被编译器实际用mov来代替<br>比如： ldr r1,=0x10 会变成 mov r1,#0x10   </p>
+<p>ARM是RISC结构，数据从RAM到CPU寄存器之间的移动只能通过L/S指令来完成，也就是ldr/str指令。  比如想把数据从RAM中某处读取到CPU寄存器中，只能使用ldr，比如：  ldr r0, 0x12345678  就是把0x12345678这个地址中的值存放到r0中。  而mov不能干这个活，mov只能在CPU寄存器之间移动数据，或者把立即数移动到CPU寄存器中，这个和x86这种CISC架构的芯片区别最大的地方。  x86中没有ldr这种指令，因为x86的mov指令可以将数据从RAM中移动到CPU寄存器中。 另外，还有一个就是ldr伪指令，虽然ldr伪指令和ARM的ldr指令很像，但是作用不太一样。ldr伪指令可以在立即数前加上=，以表示把一个地址写到某CPU寄存器中，比如： ldr r0, =0x12345678  这样，就把0x12345678这个立即数写到r0中了。所以，ldr伪指令和mov是比较相似的。 只不过mov指令限制了立即数的长度为8位，也就是不能超过512。而ldr伪指令没有这个限制。如果使用ldr伪指令时，后面跟的立即数没有超过8位，那么在实际汇编的时候该ldr伪指令是被转换为mov指令的。</p>
 </span>
       
     </div>
@@ -375,17 +334,13 @@ endchoice
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/12/10/s3c2440-内核编译(一)/" rel="next" title="s3c2440-内核编译(一)">
-                <i class="fa fa-chevron-left"></i> s3c2440-内核编译(一)
+              <a href="/2016/04/12/ARM汇编指令之LOAD-STORE指令/" rel="next" title="ARM汇编指令之LOAD-STORE指令">
+                <i class="fa fa-chevron-left"></i> ARM汇编指令之LOAD-STORE指令
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/12/10/s3c2440-支持yaffs2文件系统(三)/" rel="prev" title="s3c2440-支持yaffs2文件系统(三)">
-                s3c2440-支持yaffs2文件系统(三) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -534,7 +489,7 @@ endchoice
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u4FEE_u6539smdk_default_nand_part_u53D8_u91CF"><span class="nav-number">1.</span> <span class="nav-text">修改smdk_default_nand_part变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4FEE_u6539Nand_u8BFB_u5199_u5339_u914D_u65F6_u95F4"><span class="nav-number">2.</span> <span class="nav-text">修改Nand读写匹配时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4FEE_u6539Kconfig_u6587_u4EF6_uFF0C_u589E_u52A0menuconfig_u914D_u7F6E_u9009_u9879"><span class="nav-number">3.</span> <span class="nav-text">修改Kconfig文件，增加menuconfig配置选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u914D_u7F6E_u5185_u6838_uFF0C_u652F_u6301NANDFLASH"><span class="nav-number">4.</span> <span class="nav-text">配置内核，支持NANDFLASH</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7F16_u8BD1_u5185_u6838"><span class="nav-number">5.</span> <span class="nav-text">编译内核</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LDR_u6307_u4EE4_uFF1A"><span class="nav-number">1.</span> <span class="nav-text">LDR指令：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STR_u6307_u4EE4_uFF1A"><span class="nav-number">2.</span> <span class="nav-text">STR指令：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MOV_u6307_u4EE4_uFF1A"><span class="nav-number">3.</span> <span class="nav-text">MOV指令：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5173_u4E8E_u201D_u7D22_u5F15_u504F_u79FB_u201D__u2014_pre-indexed_addressing_u548Cpost-indexed_addressing"><span class="nav-number">4.</span> <span class="nav-text">关于”索引偏移” — pre-indexed addressing和post-indexed addressing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5176_u4ED6"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
