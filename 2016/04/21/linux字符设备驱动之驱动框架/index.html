@@ -1,0 +1,995 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="1. linux系统将设备分为3类：字符设备、块设备和网络设备
+
+字符设备：是指只能一个字节一个字节读写的设备，不能随机读取设备内存中的某一数据，读取数据需要按照先后数据。字符设备是面向流的设备，常见的字符设备有鼠标、键盘、串口、控制台和LED设备等。
+块设备：是指可以从设备的任意位置读取一定长度数据的设备。块设备包括硬盘、磁盘、U盘和SD卡等
+
+每一个字符设备或块设备都在/dev目录下对应一个设">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux字符设备驱动之驱动框架">
+<meta property="og:url" content="http://www.eastcn.me/2016/04/21/linux字符设备驱动之驱动框架/index.html">
+<meta property="og:site_name" content="SAR'S BLOG">
+<meta property="og:description" content="1. linux系统将设备分为3类：字符设备、块设备和网络设备
+
+字符设备：是指只能一个字节一个字节读写的设备，不能随机读取设备内存中的某一数据，读取数据需要按照先后数据。字符设备是面向流的设备，常见的字符设备有鼠标、键盘、串口、控制台和LED设备等。
+块设备：是指可以从设备的任意位置读取一定长度数据的设备。块设备包括硬盘、磁盘、U盘和SD卡等
+
+每一个字符设备或块设备都在/dev目录下对应一个设">
+<meta property="og:image" content="http://i.imgur.com/2vR3ZWB.png">
+<meta property="og:image" content="http://i.imgur.com/CWypuTc.png">
+<meta property="og:updated_time" content="2016-04-21T03:19:20.869Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux字符设备驱动之驱动框架">
+<meta name="twitter:description" content="1. linux系统将设备分为3类：字符设备、块设备和网络设备
+
+字符设备：是指只能一个字节一个字节读写的设备，不能随机读取设备内存中的某一数据，读取数据需要按照先后数据。字符设备是面向流的设备，常见的字符设备有鼠标、键盘、串口、控制台和LED设备等。
+块设备：是指可以从设备的任意位置读取一定长度数据的设备。块设备包括硬盘、磁盘、U盘和SD卡等
+
+每一个字符设备或块设备都在/dev目录下对应一个设">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> linux字符设备驱动之驱动框架 | SAR'S BLOG </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">SAR'S BLOG</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">just do it!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-question-circle fa-fw"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'XEiyJwjaqyW-1q_v5hRL','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                linux字符设备驱动之驱动框架
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-04-21T11:19:20+08:00" content="2016-04-21">
+              2016-04-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/嵌入式linux驱动/" itemprop="url" rel="index">
+                    <span itemprop="name">嵌入式linux驱动</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/21/linux字符设备驱动之驱动框架/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/21/linux字符设备驱动之驱动框架/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="1-_linux_u7CFB_u7EDF_u5C06_u8BBE_u5907_u5206_u4E3A3_u7C7B_uFF1A_u5B57_u7B26_u8BBE_u5907_u3001_u5757_u8BBE_u5907_u548C_u7F51_u7EDC_u8BBE_u5907"><a href="#1-_linux_u7CFB_u7EDF_u5C06_u8BBE_u5907_u5206_u4E3A3_u7C7B_uFF1A_u5B57_u7B26_u8BBE_u5907_u3001_u5757_u8BBE_u5907_u548C_u7F51_u7EDC_u8BBE_u5907" class="headerlink" title="1. linux系统将设备分为3类：字符设备、块设备和网络设备"></a>1. linux系统将设备分为3类：字符设备、块设备和网络设备</h1><p><img src="http://i.imgur.com/2vR3ZWB.png" alt=""></p>
+<ul>
+<li>字符设备：是指只能一个字节一个字节读写的设备，不能随机读取设备内存中的某一数据，读取数据需要按照先后数据。字符设备是面向流的设备，常见的字符设备有鼠标、键盘、串口、控制台和LED设备等。</li>
+<li>块设备：是指可以从设备的任意位置读取一定长度数据的设备。块设备包括硬盘、磁盘、U盘和SD卡等</li>
+</ul>
+<p>每一个字符设备或块设备都在/dev目录下对应一个设备文件。linux用户程序通过设备文件（或称设备节点）来使用驱动程序操作字符设备和块设备。</p>
+<h1 id="2-__u5B57_u7B26_u8BBE_u5907_u3001_u5B57_u7B26_u8BBE_u5907_u9A71_u52A8_u4E0E_u7528_u6237_u7A7A_u95F4_u8BBF_u95EE_u8BE5_u8BBE_u5907_u7684_u7A0B_u5E8F_u4E09_u8005_u4E4B_u95F4_u7684_u5173_u7CFB"><a href="#2-__u5B57_u7B26_u8BBE_u5907_u3001_u5B57_u7B26_u8BBE_u5907_u9A71_u52A8_u4E0E_u7528_u6237_u7A7A_u95F4_u8BBF_u95EE_u8BE5_u8BBE_u5907_u7684_u7A0B_u5E8F_u4E09_u8005_u4E4B_u95F4_u7684_u5173_u7CFB" class="headerlink" title="2. 字符设备、字符设备驱动与用户空间访问该设备的程序三者之间的关系"></a>2. 字符设备、字符设备驱动与用户空间访问该设备的程序三者之间的关系</h1><p><img src="http://i.imgur.com/CWypuTc.png" alt=""></p>
+<p>在linux内核中使用cdev结构体来藐视字符设备，成员dev_t定义设备号（包括主，次设备号）以确定字符设备的唯一性。成员file_operations定义字符设备驱动提供给VFS的接口函数，如open()，read()，write()等。</p>
+<h1 id="2-1_cdev_u7ED3_u6784_u4F53_u5B9A_u4E49_uFF1A"><a href="#2-1_cdev_u7ED3_u6784_u4F53_u5B9A_u4E49_uFF1A" class="headerlink" title="2.1 cdev结构体定义："></a>2.1 cdev结构体定义：</h1><pre><code>struct cdev {
+    struct kobject kobj;                    /* 内核对象 */
+    struct module *owner;                    /* 该字符设备所在内核模块的对象指针 */
+    const struct file_operations *ops;        /* 字符设备所能实现的方法，关键结构体 */
+    struct list_head list;                    /* 将已向内核注册的所有字符设备形成链表 */
+    dev_t dev;                                /* 设备号，由主设备号和次设备号构成 */
+    unsigned int count;                        /* 属于同一主设备号的次设备号的个数 */
+};
+</code></pre><p>内核给出的操作struct cdev结构的接口主要有以下几个：</p>
+<pre><code>void cdev_init(struct cdev *, const struct file_operations *);
+</code></pre><p>该函数主要对struct cdev结构体做初始化，主要工作有(1)将整个结构体清零；(2)初始化list成员使其指向自身；(3)初始化kobj成员；(4)初始化ops成员.</p>
+<pre><code>struct cdev *cdev_alloc(void);
+</code></pre><p>该函数主要分配一个struct cdev结构，并做了cdev_init中所做的前面3步初始化工作(第四步初始化工作需要在调用cdev_alloc后，显式的做初始化即: .ops=xxx_ops).<br>在上面的两个初始化的函数中，我们没有看到关于owner成员、dev成员、count成员的初始化；其实，owner成员的存在体现了驱动程序与内核模块间的亲密关系，struct module是内核对于一个模块的抽象，该成员在字符设备中可以体现该设备隶属于哪个模块，在驱动程序的编写中一般由用户显式的初始化 .owner = THIS_MODULE, 该成员可以防止设备的方法正在被使用时，设备所在模块被卸载。而dev成员和count成员则在cdev_add中才会赋上有效的值。</p>
+<pre><code>int cdev_add(struct cdev *, dev_t, unsigned);
+</code></pre><p>该函数向内核注册一个struct cdev结构，即正式通知内核由struct cdev *p代表的字符设备已经可以使用了。当然这里还需提供两个参数：(1)第一个设备号 dev，(2)和该设备关联的设备编号的数量。这两个参数直接赋值给struct cdev 的dev成员和count成员。</p>
+<pre><code>void cdev_del(struct cdev *);
+</code></pre><p>该函数向内核注销一个struct cdev结构，即正式通知内核由struct cdev *p代表的字符设备已经不可以使用了。</p>
+<p>从上述的接口讨论中，我们发现对于struct cdev的初始化和注册的过程中，我们需要提供几个东西(1) struct file_operations结构指针；(2)dev设备号；(3)count次设备号个数。但是我们依旧不明白这几个值到底代表着什么，而我们又该如何去构造这些值！</p>
+<h1 id="2-2__u8BBE_u5907_u53F7_28dev_t_29"><a href="#2-2__u8BBE_u5907_u53F7_28dev_t_29" class="headerlink" title="2.2 设备号(dev_t)"></a>2.2 设备号(dev_t)</h1><p>linux设备号由主设备和次设备号组成，主设备号标识设备对应的驱动程序，次设备号由内核使用，确定设备文件所指定的设备。<br>在2.6版本内核中，用dev_t类型保存设备主设备号和次设备号，2.6内核中dev_t为32位数，前12位做主设备号，其余20位做次设备号。内核在<linux kdev_t.h="">提供了获取主、次设备的号的宏，作用一个明智的使用者，我们实在不应该去妄自猜测major和minor各占多少bit位，也不应该去猜测dev_t的实现。</linux></p>
+<pre><code>MAJOR(dev_t dev);                /* 从dev获取主设备号 */
+MINOR(dev_t dev);                /* 从dev获取次设备号 */
+MKDEV(int major, int minor);    /* 将主设备号和次设备号转换成dev_t类型 */
+</code></pre><h1 id="2-3__u8BBE_u5907_u53F7_u7684_u5206_u914D_u4E0E_u91CA_u653E"><a href="#2-3__u8BBE_u5907_u53F7_u7684_u5206_u914D_u4E0E_u91CA_u653E" class="headerlink" title="2.3 设备号的分配与释放"></a>2.3 设备号的分配与释放</h1><p>在建立字符设备前，驱动程序需要向系统申请设备号，内核提供两种方式获取设备号</p>
+<ul>
+<li><p>申请指定设备号</p>
+<pre><code>int register_chrdev_region(dev_t from, unsigned count, const char *name);
+</code></pre><p>申请指定设备号可先cat /proc/devices查看当前系统已使用设备号，选取未使用设备号调用上述接口获取设备号。</p>
+</li>
+<li><p>由内核自动分配设备号</p>
+<pre><code>int alloc_chrdev_region(dev_t *dev, unsigned baseminor, unsigned count, const char *name);
+</code></pre><p>动态申请是由系统自动分配</p>
+</li>
+<li><p>释放设备号</p>
+<pre><code>void unregister_chrdev_region(dev_t from, unsigned count);
+</code></pre></li>
+</ul>
+<h1 id="2-3_file_operations_u7ED3_u6784_u4F53"><a href="#2-3_file_operations_u7ED3_u6784_u4F53" class="headerlink" title="2.3 file_operations结构体"></a>2.3 file_operations结构体</h1><p>file_operations结构体用来建立驱动程序相关操作与设备编号之间的联系。该结构定义在<linux fs.h="">文件中，其中包含了一组函数指针，每个打开的文件（file结构表示）和一组函数关联（通过包含指向一个file_operations结构的f_op字段）。这些操作主要用来实现系统调用，命令为open，read等。</linux></p>
+<pre><code>struct file_operations {
+    /*拥有该结构的模块计数，一般为THIS_MODULE*/
+    struct module *owner;
+
+    /*用于修改文件当前的读写位置*/
+    loff_t (*llseek) (struct file *, loff_t, int);
+
+    /*从设备中同步读取数据*/
+    ssize_t (*read) (struct file *, char __user *, size_t, loff_t *);
+
+    /*向设备中写数据*/
+    ssize_t (*write) (struct file *, const char __user *, size_t, loff_t *);
+
+    ssize_t (*aio_read) (struct kiocb *, const struct iovec *, unsigned long, loff_t);
+    ssize_t (*aio_write) (struct kiocb *, const struct iovec *, unsigned long, loff_t);
+    int (*readdir) (struct file *, void *, filldir_t);
+
+    /*轮询函数，判断目前是否可以进行非阻塞的读取或写入*/
+    unsigned int (*poll) (struct file *, struct poll_table_struct *);
+    int (*ioctl) (struct inode *, struct file *, unsigned int, unsigned long);
+    long (*unlocked_ioctl) (struct file *, unsigned int, unsigned long);
+    long (*compat_ioctl) (struct file *, unsigned int, unsigned long);
+
+    /*用于请求将设备内存映射到进程地址空间*/
+    int (*mmap) (struct file *, struct vm_area_struct *);
+
+    /*打开设备文件*/
+    int (*open) (struct inode *, struct file *);
+    int (*flush) (struct file *, fl_owner_t id);
+
+    /*关闭设备文件*/
+    int (*release) (struct inode *, struct file *);
+    int (*fsync) (struct file *, struct dentry *, int datasync);
+    int (*aio_fsync) (struct kiocb *, int datasync);
+
+    /*通知设备FASYNC标志发现变化，用于异步通知*/
+    int (*fasync) (int, struct file *, int);
+    int (*lock) (struct file *, int, struct file_lock *);
+    ssize_t (*sendpage) (struct file *, struct page *, int, size_t, loff_t *, int);
+    unsigned long (*get_unmapped_area)(struct file *, unsigned long, unsigned long, unsigned long, unsigned long);
+    int (*check_flags)(int);
+    int (*flock) (struct file *, int, struct file_lock *);
+    ssize_t (*splice_write)(struct pipe_inode_info *, struct file *, loff_t *, size_t, unsigned int);
+    ssize_t (*splice_read)(struct file *, loff_t *, struct pipe_inode_info *, size_t, unsigned int);
+    int (*setlease)(struct file *, long, struct file_lock **);
+};
+</code></pre><h1 id="2-4_file_u7ED3_u6784"><a href="#2-4_file_u7ED3_u6784" class="headerlink" title="2.4 file结构"></a>2.4 file结构</h1><p>file结构表示一个打开的文件（它不仅仅限定于设备驱动程序，系统中每个打开的文件在内核空间都有一个对应的file结构），在<linux fs.h="">中定义，由内核在open时创建，并传递给在该文件上进行任何操作的函数，直到最后的close函数，在文件的所有实例都被关闭后，内核释放该结构。</linux></p>
+<pre><code>struct file {
+    .......
+    unsigned int         f_flags;                 /*文件标志，如：O_NONBLOCK*/
+    fmode_t            f_mode;                         /*文件模式，如FMODE_READ，FMODE_WRITE*/
+    loff_t            f_pos;                         /*当前文件读写位置，loff_t 是一个64位的数，需要时，须强制转换为32位*/
+    const struct file_operations    *f_op;     /* file_operations */
+    void            *private_data;                 /*非常重要，用于存放转换后的设备描述结构指针*/
+    struct path        f_path;                         /* f_path-&gt;dentry文件对应的目录结构 */
+    .......
+};
+</code></pre><h1 id="2-5_inode_u7ED3_u6784"><a href="#2-5_inode_u7ED3_u6784" class="headerlink" title="2.5 inode结构"></a>2.5 inode结构</h1><p>inode结构在内核内部表示文件，在<linux fs.h="">中定义，和file结构有区别，file结构表示打开文件的描述符，对单个文件，可能会有许多表示打开的文件描述符的file结构，但只有一个inode结构，驱动使用结构中两个成员。</linux></p>
+<pre><code>struct inode {
+      .......
+    dev_t            i_rdev;                /* 表示设备文件的inode结构，该字段为设备编号 */
+    union {
+        .......
+        struct cdev        *i_cdev;        /*cdev 是表示字符设备的内核的内部结构*/
+    };
+};
+</code></pre><hr>
+<h1 id="3-_linux_u5B57_u7B26_u8BBE_u5907_u9A71_u52A8_u6846_u67B6"><a href="#3-_linux_u5B57_u7B26_u8BBE_u5907_u9A71_u52A8_u6846_u67B6" class="headerlink" title="3. linux字符设备驱动框架"></a>3. linux字符设备驱动框架</h1><h1 id="3-1__u521D_u59CBcdev"><a href="#3-1__u521D_u59CBcdev" class="headerlink" title="3.1 初始cdev"></a>3.1 初始cdev</h1><p>在字符设备驱动模块加载函数中应该实现设备号的申请和cdev结构的注册，而在卸载函数中应该实现设备号的释放与cdev结构的注销。<br>我们一般习惯将cdev内嵌到另外一个设备相关的结构体里面，该设备包含所涉及的cdev、私有数据及信号量等等信息。常见的设备结构体、模块加载函数、模块卸载函数形式如下：</p>
+<pre><code>/*设备结构体*/
+
+struct  xxx_dev{
+
+  struct   cdev   cdev;
+
+  char *data;
+
+  struct semaphore sem;
+
+  ......
+
+};
+
+
+
+/*模块加载函数*/
+
+static int   __init  xxx_init(void)
+
+{
+
+  .......
+
+  初始化cdev结构;
+
+  申请设备号；
+
+  注册设备号；
+
+
+
+   申请分配设备结构体的内存；  /*非必须*/
+
+}
+
+
+
+/*模块卸载函数*/
+
+static void  __exit   xxx_exit(void)
+
+{
+
+   .......
+
+   释放原先申请的设备号；
+
+   释放原先申请的内存；
+
+   注销cdev设备；
+
+}
+</code></pre><h1 id="3-2__u5B9A_u4E49struct_file_operations_u7ED3_u6784_u4F53_u6210_u5458_u51FD_u6570"><a href="#3-2__u5B9A_u4E49struct_file_operations_u7ED3_u6784_u4F53_u6210_u5458_u51FD_u6570" class="headerlink" title="3.2 定义struct file_operations结构体成员函数"></a>3.2 定义struct file_operations结构体成员函数</h1><p>声明struct file_operations xxx_fops</p>
+<pre><code>   struct file_operations xxx_fops = {
+
+  .owner = THIS_MODULE,
+
+  .open = xxx_open,
+
+  .read = xxx_read,
+
+ .write = xxx_write,
+
+ .close = xxx_release,
+
+ .ioctl = xxx_ioctl,
+
+ .lseek = xxx_llseek,
+
+};
+</code></pre><p>实现file_operations中成员函数</p>
+<pre><code>/*读设备*/
+
+ssize_t   xxx_read(struct file *filp,  char __user *buf,  size_t  count,  loff_t *f_pos)
+
+{
+
+......
+
+使用filp-&gt;private_data获取设备结构体指针；
+
+分析和获取有效的长度；
+
+/*内核空间到用户空间的数据传递*/
+
+copy_to_user(void __user *to,  const void *from,  unsigned long count);
+
+......
+
+}
+
+/*写设备*/
+
+ssize_t   xxx_write(struct file *filp,  const char  __user *buf,  size_t  count,  loff_t *f_pos)
+
+{
+
+......
+
+使用filp-&gt;private_data获取设备结构体指针；
+
+分析和获取有效的长度；
+
+/*用户空间到内核空间的数据传递*/
+
+copy_from_user(void *to,  const  void   __user *from,  unsigned long count);
+
+......
+
+}
+
+/*ioctl函数*/
+
+static int xxx_ioctl(struct inode *inode,struct file *filp,unsigned int cmd,unsigned long arg)
+
+{
+
+  ......
+
+  switch(cmd){
+
+   case  xxx_CMD1:
+
+......
+
+break;
+
+   case  xxx_CMD2:
+
+   .......
+
+  break;
+
+   default:
+
+  return -ENOTTY;  /*不能支持的命令*/
+
+  }
+
+  return 0;
+
+}
+</code></pre><p>将xxx_fops赋值给cdev中ops指针</p>
+<pre><code>struct  xxx_dev *my_dev-&gt;ops = &amp;xxx_fops;
+</code></pre></span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/14/ARM汇编指令之LDR、STR和MOV指令/" rel="next" title="ARM汇编指令之LDR、STR和MOV指令">
+                <i class="fa fa-chevron-left"></i> ARM汇编指令之LDR、STR和MOV指令
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+       <!-- ��˵���ۿ� start -->
+    <div class="ds-thread" data-thread-key="<%= post.layout %>-<%= post.slug %>" data-title="<%= post.title %>" data-url="<%= page.permalink %>"></div>
+    <!-- ��˵���ۿ� end -->
+    <!-- ��˵����JS���� start (һ����ҳֻ������һ��) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'<%= config.duoshuo_shortname %>'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- ��˵����JS���� end -->
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="sar" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">sar</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Don't be afraid to fail, Be afraid not to try!</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zwxcp" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/chen999" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> weibo
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-_linux_u7CFB_u7EDF_u5C06_u8BBE_u5907_u5206_u4E3A3_u7C7B_uFF1A_u5B57_u7B26_u8BBE_u5907_u3001_u5757_u8BBE_u5907_u548C_u7F51_u7EDC_u8BBE_u5907"><span class="nav-number">1.</span> <span class="nav-text">1. linux系统将设备分为3类：字符设备、块设备和网络设备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-__u5B57_u7B26_u8BBE_u5907_u3001_u5B57_u7B26_u8BBE_u5907_u9A71_u52A8_u4E0E_u7528_u6237_u7A7A_u95F4_u8BBF_u95EE_u8BE5_u8BBE_u5907_u7684_u7A0B_u5E8F_u4E09_u8005_u4E4B_u95F4_u7684_u5173_u7CFB"><span class="nav-number">2.</span> <span class="nav-text">2. 字符设备、字符设备驱动与用户空间访问该设备的程序三者之间的关系</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-1_cdev_u7ED3_u6784_u4F53_u5B9A_u4E49_uFF1A"><span class="nav-number">3.</span> <span class="nav-text">2.1 cdev结构体定义：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-2__u8BBE_u5907_u53F7_28dev_t_29"><span class="nav-number">4.</span> <span class="nav-text">2.2 设备号(dev_t)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-3__u8BBE_u5907_u53F7_u7684_u5206_u914D_u4E0E_u91CA_u653E"><span class="nav-number">5.</span> <span class="nav-text">2.3 设备号的分配与释放</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-3_file_operations_u7ED3_u6784_u4F53"><span class="nav-number">6.</span> <span class="nav-text">2.3 file_operations结构体</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-4_file_u7ED3_u6784"><span class="nav-number">7.</span> <span class="nav-text">2.4 file结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-5_inode_u7ED3_u6784"><span class="nav-number">8.</span> <span class="nav-text">2.5 inode结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-_linux_u5B57_u7B26_u8BBE_u5907_u9A71_u52A8_u6846_u67B6"><span class="nav-number">9.</span> <span class="nav-text">3. linux字符设备驱动框架</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-1__u521D_u59CBcdev"><span class="nav-number">10.</span> <span class="nav-text">3.1 初始cdev</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-2__u5B9A_u4E49struct_file_operations_u7ED3_u6784_u4F53_u6210_u5458_u51FD_u6570"><span class="nav-number">11.</span> <span class="nav-text">3.2 定义struct file_operations结构体成员函数</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sar</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zwxcp"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>
